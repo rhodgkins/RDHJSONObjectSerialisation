@@ -154,7 +154,15 @@
     if ([value isKindOfClass:[NSString class]]) {
         return YES;
     } else if ([value isKindOfClass:[NSNumber class]]) {
-        return YES;
+        
+        // Don't allow NaN or Inifity as per JSON spec
+        if ([@(INFINITY) isEqualToNumber:value]) {
+            return NO;
+        } else if ([@(NAN) isEqualToNumber:value]) {
+            return NO;
+        } else {
+            return YES;
+        }
     } else {
         return NO;
     }

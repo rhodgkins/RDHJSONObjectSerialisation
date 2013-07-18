@@ -26,6 +26,11 @@
 
 @property (nonatomic, copy) NSDictionary *jsonInterfaceExtProperty;
 
+@property (nonatomic, copy) AnotherSimpleObject *nanNumberProperty;
+@property (nonatomic, copy) AnotherSimpleObject *infinityNumberProperty;
+
+@property (nonatomic, copy) NSDictionary *jsonInvalidNumberInterfaceExtProperty;
+
 @end
 
 @implementation SimpleObject
@@ -60,6 +65,11 @@
         _objectInterfaceExtProperty = [NSObject new];
         
         _jsonInterfaceExtProperty = @{@"KEY 1" : @"VALUE 1", @"KEY 2" : @[@"S1", @"S2"], @"KEY 3" : @{@"KEY 4" : @[@"SS1", @"SS2"], @"KEY 5" : @"VALUE 2", @"KEY 6" : @{}}};
+        
+        _nanNumberProperty = [AnotherSimpleObject objectWithValue:@(NAN)];
+        _infinityNumberProperty = [AnotherSimpleObject objectWithValue:@(INFINITY)];
+        
+        _jsonInvalidNumberInterfaceExtProperty = @{@"NAN KEY" : @(NAN), @"INFINITY KEY" : @(INFINITY)};
     }
     return self;
 }
