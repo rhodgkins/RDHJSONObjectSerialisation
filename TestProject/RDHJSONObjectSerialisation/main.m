@@ -36,18 +36,22 @@ int main(int argc, const char * argv[])
 static void run()
 {
     SubSimpleObject *o = [SubSimpleObject new];
-    o.objectProp = [SubSimpleObject new];
+//    o.objectProp = [SubSimpleObject new];
     o.objectProp.objectProp = [SubSimpleObject new];
     o.objectProp.objectProp.objectProp = [SubSimpleObject new];
     
-    NSString *s = [[NSString alloc] initWithData:[RDHJSONObjectSerialisation JSONForObject:o options:0 error:nil] encoding:NSUTF8StringEncoding];
-    NSLog(@"%@ -> %@", [SubSimpleObject class], s);
+    o.arrayObjectProp = @[[SubSimpleObject new], [SubSimpleObject new]];
+    o.dictObjectProp = @{RDH_KEY_COCOCA : [NSError errorWithDomain:@"DOMAIN" code:0 userInfo:nil],
+                         RDH_KEY_CUSTOM : [SubSimpleObject new]};
+    NSString *s;
+    s = [[NSString alloc] initWithData:[RDHJSONObjectSerialisation JSONForObject:o options:0 error:nil] encoding:NSUTF8StringEncoding];
+//    NSLog(@"%@ -> %@", o, s);
     
     s = [[NSString alloc] initWithData:[RDHJSONObjectSerialisation JSONForObject:o options:RDHJSONWritingOptionsConvertNilsToNSNulls error:nil] encoding:NSUTF8StringEncoding];
-    NSLog(@"%@ -> %@", [SubSimpleObject class], s);
+//    NSLog(@"%@ -> %@", o, s);
     
-    
-    NSLog(@"%@ -> %@", s, [RDHJSONObjectSerialisation objectOfKind:[SubSimpleObject class] forJSON:[s dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil]);
+    SubSimpleObject *o2 = [RDHJSONObjectSerialisation objectOfKind:[SubSimpleObject class] forJSON:[s dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    NSLog(@"%@ -> %@", s, o2);
     
     return;
     NSLog(@"%@ -> %@", [AnotherSimpleObject class], [[NSString alloc] initWithData:[RDHJSONObjectSerialisation JSONForObject:[AnotherSimpleObject objectWithValue:@"sdfsdfdsf"] options:0 error:nil] encoding:NSUTF8StringEncoding]);

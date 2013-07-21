@@ -10,6 +10,9 @@
 
 #import "RDHJSONObjectSerialisationProtocol.h"
 
+static NSString *const RDH_KEY_COCOCA = @"COCOA_OBJECT";
+static NSString *const RDH_KEY_CUSTOM = @"CUSTOM_OBJECT";
+
 @interface SubSimpleObject : NSObject<RDHJSONObjectSerialisationProtocol>
 
 @property (nonatomic, strong) NSString *strProp;
@@ -38,5 +41,11 @@
 @property (nonatomic, strong) NSDictionary *dictMixedProp;
 
 @property (nonatomic, strong) SubSimpleObject *objectProp;
+
+@property (nonatomic, strong) NSNotification *cocoaObjectProp;
+
+@property (nonatomic, strong) NSArray *arrayObjectProp;
+
+@property (nonatomic, strong) NSDictionary *dictObjectProp;
 
 @end

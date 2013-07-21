@@ -18,6 +18,8 @@
         return [NSString class];
     } else if ([@"arrayNumberProp" isEqualToString:property]) {
         return [NSNumber class];
+    } else if ([@"arrayObjectProp" isEqualToString:property]) {
+        return self;
     }
     return nil;
 }
@@ -33,6 +35,12 @@
             return [NSNumber class];
         } else if ([@"STR" isEqualToString:key]) {
             return [NSString class];
+        }
+    } else if ([@"dictObjectProp" isEqualToString:property]) {
+        if ([RDH_KEY_COCOCA isEqualToString:key]) {
+            return [NSNotification class];
+        } else if ([RDH_KEY_CUSTOM isEqualToString:key]) {
+            return self;
         }
     }
     return nil;
@@ -72,6 +80,8 @@
         _dictMixedProp = @{@"NUM" : @1,
                             @"STR" : @"V2"
                             };
+        
+        _cocoaObjectProp = [NSNotification notificationWithName:@"DUMMY" object:nil];
     }
     return self;
 }
@@ -86,7 +96,11 @@
     for (NSUInteger i=0; i<count; i++) {
         NSString *name = [NSString stringWithUTF8String:property_getName(list[i])];
         
-        [props setValue:[self valueForKey:name] forKey:name];
+        id v = [self valueForKey:name];
+        if (!v) {
+            v = @"NULL";
+        }
+        [props setValue:v forKey:name];
     }
     
     return [props debugDescription];
