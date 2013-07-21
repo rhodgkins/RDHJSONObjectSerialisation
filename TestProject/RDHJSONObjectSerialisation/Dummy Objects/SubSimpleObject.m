@@ -103,7 +103,7 @@
         [props setValue:v forKey:name];
     }
     
-    return [props debugDescription];
+    return [[[props description] stringByReplacingOccurrencesOfString:@"\n" withString:@"\r"] stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\""];
 }
 
 @end

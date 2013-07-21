@@ -48,7 +48,7 @@ static void run()
 //    NSLog(@"%@ -> %@", o, s);
     
     s = [[NSString alloc] initWithData:[RDHJSONObjectSerialisation JSONForObject:o options:RDHJSONWritingOptionsConvertNilsToNSNulls error:nil] encoding:NSUTF8StringEncoding];
-//    NSLog(@"%@ -> %@", o, s);
+    NSLog(@"%@ -> %@", o, s);
     
     SubSimpleObject *o2 = [RDHJSONObjectSerialisation objectOfKind:[SubSimpleObject class] forJSON:[s dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     NSLog(@"%@ -> %@", s, o2);
