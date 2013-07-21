@@ -82,12 +82,7 @@
             return value;
             
         } else if ([self isValidJSONPrimative:value]) {
-            
-            if ([value isKindOfClass:[NSDecimalNumber class]]) {
-                return [self stringForDecimalNumber:value];
-            } else {
-                return value;
-            }
+            return value;
             
         } else if ([value isKindOfClass:[NSArray class]]) {
             return [self JSONForArray:value options:options];

@@ -10,4 +10,10 @@
 
 @interface RDHUtils : NSObject
 
++(NSString *)stringForDecimalNumber:(NSDecimalNumber *)number;
+
++(NSDecimalNumber *)decimalNumberForString:(NSString *)string;
+
++(NSNumber *)numberForString:(NSString *)string;
+
 @end

@@ -10,8 +10,10 @@
 
 #import "RDHJSONObjectSerialisationProtocol.h"
 
+#import "SubSimpleObject.h"
+
 typedef struct simpleStruct {
-    int x;
+    int tttt;
 } SimpleStruct;
 
 @interface AnotherSimpleObject : NSObject<RDHJSONObjectSerialisationProtocol>
@@ -21,12 +23,14 @@ typedef struct simpleStruct {
 @property (nonatomic, assign) dispatch_block_t blockProperty;
 @property (nonatomic, assign) int* intPointerProperty;
 @property (nonatomic, assign) NSObject *const*const objectArrayProperty;
-@property (nonatomic, assign) int (*functionPointerDefault)(char *);
+@property (nonatomic, assign) NSString * (*functionPointerDefault)(Class);
 @property (nonatomic, assign) void *voidPointerDefault;
 @property (nonatomic, assign) SimpleStruct structProperty;
 
 @property (nonatomic, assign) bool cppBoolProperty;
 @property (nonatomic, assign) _Bool c99BoolProperty;
+
+@property (nonatomic, assign) Class classProperty;
 
 +(instancetype)objectWithValue:(id)value;
 

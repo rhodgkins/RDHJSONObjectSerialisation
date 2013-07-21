@@ -14,6 +14,8 @@
 
 #import "RDHJSONObjectSerialisationProtocol.h"
 
+#import "RDHUtils.h"
+
 @interface RDHJSONObjectSerialisation ()
 
 @property (nonatomic, copy) NSMutableDictionary *classPropertyCache;
@@ -25,9 +27,5 @@
 +(BOOL)isValidJSONPrimativeClass:(Class)cls;
 
 +(BOOL)conformsToSerialisationProtocol:(id)value;
-
-+(NSString *)stringForDecimalNumber:(NSDecimalNumber *)number;
-
-+(NSDecimalNumber *)decimalNumberForString:(NSString *)string;
 
 @end

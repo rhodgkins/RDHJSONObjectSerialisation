@@ -44,8 +44,6 @@ typedef NS_ENUM(char, RDHPropertyType) {
 
 @property (nonatomic, assign, readonly) Class declaingClass;
 @property (nonatomic, copy, readonly) NSString *name;
-@property (nonatomic, copy, readonly) NSString *getterName;
-@property (nonatomic, copy, readonly) NSString *setterName;
 
 /// If this is RDHPropertyTypeObject then classType will be valid.
 @property (nonatomic, assign, readonly) RDHPropertyType type;

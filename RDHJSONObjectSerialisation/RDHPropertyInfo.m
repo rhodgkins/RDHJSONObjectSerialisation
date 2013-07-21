@@ -10,6 +10,8 @@
 
 #import "RDHJSONObjectSerialisationProtocol.h"
 
+#import "RDHUtils.h"
+
 typedef NS_ENUM(char, RDHPropertyAttribute)
 {
     RDHPropertyAttributeType = 'T',
@@ -51,8 +53,7 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
 @property (nonatomic, copy, readonly) NSString *setter;
 @property (nonatomic, assign, readonly) Ivar iVar;
 
-// Redeclare to enable backing iVar
-@property (nonatomic, copy, readwrite) NSString *setterName;
+@property (nonatomic, copy, readonly) NSString *getterName;
 
 @property (nonatomic, assign, readonly) RDHPropertyAttribute kind;
 
@@ -89,7 +90,7 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
         _nonatomic = NO;
         _dynamic = NO;
         
-        NSLog(@"%s", propAttrs);
+        //        NSLog(@"%s", propAttrs);
         do {
             RDHPropertyAttribute attr = *propAttrs;
             NSString *value = RDHValueForAttributeStarting(&propAttrs);
@@ -157,21 +158,6 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
             _iVar = class_getInstanceVariable(declaringClass, [iVarName cStringUsingEncoding:NSASCIIStringEncoding]);
         }
         
-        if (_readonly) {
-            _setterName = nil;
-        } else {
-            if (!_setterName) {
-                if (_setter) {
-                    // Used the delcared setter name
-                    _setterName = [_setter copy];
-                } else {
-                    // Derive setter name by captialising first letter and prepending set
-                    NSString *setterName = [[[_name substringToIndex:1] uppercaseString] stringByAppendingString:[_name substringFromIndex:1]];
-                    _setterName = [NSString stringWithFormat:@"set%@", setterName];
-                }
-            }
-        }
-        
         const BOOL checkForSerialisingProperty = [declaringClass respondsToSelector:@selector(shouldSerialiseProperty:)];
         const BOOL checkForDeserialisingProperty = [declaringClass respondsToSelector:@selector(shouldDeserialiseProperty::)];
         const BOOL checkForSerialisationNameForProperty = [declaringClass respondsToSelector:@selector(serialisationNameForProperty:)];
@@ -187,11 +173,6 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
         }
     }
     return self;
-}
-
--(BOOL)canSetValue
-{
-    return self.setterName || self.iVar;
 }
 
 -(id)serialisationValueForValue:(id)value
@@ -216,7 +197,22 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
 {
     id value = [object valueForKey:[self getterName]];
     // See if there was a custom serialiser and run it thru it
-    return [self serialisationValueForValue:value];
+    value = [self serialisationValueForValue:value];
+    if (self.type == RDHPropertyTypeObject && [self.typeClass isSubclassOfClass:[NSNumber class]]) {
+        
+        if ([value isKindOfClass:[NSNumber class]]) {
+            // Value is still NSNumber
+            value = [RDHUtils stringForDecimalNumber:value];
+        }
+        
+    } else if (self.type == RDHPropertyTypeClass) {
+        
+        if (class_isMetaClass(object_getClass(value))) {
+            // Value still a class
+            value = NSStringFromClass(value);
+        }
+    }
+    return value;
 }
 
 -(BOOL)setValue:(id)value onObject:(id)object
@@ -231,21 +227,30 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
             allowedToSet = [self checkType:value];
         } @catch (NSException *exception) {
             ex = exception;
-        }
-        
-        if (allowedToSet) {
+        } @finally {
             
-            // Convert special values
-            if (self.type == RDHPropertyTypeClass) {
-                value = NSClassFromString(value);
+            if (allowedToSet) {
+                
+                value = [self specialValueForValue:value];
+                
+                if (self.setter) {
+                    SEL setterSelector = NSSelectorFromString(self.setter);
+                    if ([object respondsToSelector:setterSelector]) {
+                        // Just to stop errors
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+                        [object performSelector:setterSelector withObject:value];
+#pragma clang diagnostic pop
+                    }
+                } else if (!self.readonly) {
+                    // Set value is standard so just
+                    [object setValue:value forKeyPath:self.name];
+                } else {
+                    // Most likely readonly property so set the backing iVar
+                    object_setIvar(object, self.iVar, value);
+                }
+                return YES;
             }
-            
-            if ([self setterName]) {
-                [object setValue:value forKey:[self setterName]];
-            } else {
-                object_setIvar(object, self.iVar, value);
-            }
-            return YES;
         }
         
         [ex raise];
@@ -255,11 +260,17 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
 
 -(BOOL)checkType:(id)value
 {
+    if (!value) {
+        return YES;
+    }
     // We need to make sure that the incoming value can be assigned to this property
     
     if (self.type == RDHPropertyTypeObject) {
-        if ([[value class] isSubclassOfClass:self.typeClass]) {
+        // Only set if the types match or we're using id type
+        if ([value isKindOfClass:self.typeClass] || !self.typeClass) {
             return YES;
+        } else if ([value isKindOfClass:[NSString class]]) {
+            return [self.typeClass isSubclassOfClass:[NSNumber class]];
         }
     } else {
         
@@ -274,9 +285,37 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
     @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"Cannot set value of class %@ on property %@ declared as type %@ in class %@", [value class], self.name, [[self class] stringForType:self.type orClass:self.typeClass], NSStringFromClass(self.declaingClass)] userInfo:nil];
 }
 
+-(id)specialValueForValue:(id)value
+{
+    // Convert special values
+    if (self.type == RDHPropertyTypeClass) {
+        value = NSClassFromString(value);
+        
+    } else if (self.type == RDHPropertyTypeObject) {
+        
+        if ([self.typeClass isSubclassOfClass:[NSDecimalNumber class]]) {
+            value = [RDHUtils decimalNumberForString:value];
+        } else if ([self.typeClass isSubclassOfClass:[NSNumber class]]) {
+            value = [RDHUtils numberForString:value];
+        }
+    } else if ([[self class] canAssignNumber:self.type]) {
+        if ([value isKindOfClass:[NSString class]]) {
+            // Convert to decimal number to preserve accuracy
+            value = [RDHUtils decimalNumberForString:value];
+        }
+    }
+    
+    return value;
+}
+
 -(NSString *)getterName
 {
     return self.getter ? self.getter : self.name;
+}
+
+-(BOOL)canSetValue
+{
+    return !self.readonly || self.iVar;
 }
 
 -(BOOL)isAssign
@@ -326,12 +365,12 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
     [s appendFormat:@"name=%@, \n\t", self.name];
     [s appendFormat:@"declaringClass=%@, \n\t", self.declaingClass];
     [s appendFormat:@"derivedGetterName=%@, \n\t", self.getterName];
-    [s appendFormat:@"derivedSetterName=%@, \n\t", self.setterName];
+    [s appendFormat:@"derivedSetterName=%@, \n\t", self.setter ? self.setter : self.name];
     [s appendFormat:@"canSerialise=%d, \n\t", self.canSerialise];
     [s appendFormat:@"canDeserialise=%d, \n\t", self.canDeserialise];
     [s appendFormat:@"serialisationName=%@, \n\t", self.serialisationName];
     
-    [s appendFormat:@"attributes=T%c,", self.type];
+    [s appendFormat:@"attributes=T%c", self.type];
     if (self.type == RDHPropertyTypeObject && self.typeClass) {
         [s appendFormat:@"\"%@\"", NSStringFromClass(self.typeClass)];
     }
@@ -421,10 +460,10 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
         case RDHPropertyTypeUnsignedChar:
         case RDHPropertyTypeUnsignedLong:
         case RDHPropertyTypeUnsignedLongLong:
-        case RDHPropertyTypeCharacterString:
         case RDHPropertyTypeCBool:
             return YES;
             
+        case RDHPropertyTypeCharacterString:
         case RDHPropertyTypeSelector:
         case RDHPropertyTypeVoid:
         case RDHPropertyTypePointer:
@@ -536,6 +575,8 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
         case RDHPropertyTypeUnsignedInt:
         case RDHPropertyTypeUnsignedLong:
         case RDHPropertyTypeUnsignedLongLong:
+        case RDHPropertyTypeFloat:
+        case RDHPropertyTypeDouble:
             return YES;
             
         default:
@@ -545,7 +586,7 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
 
 +(BOOL)canAssignString:(RDHPropertyType)type
 {
-    return [self canAssignNumber:type] || type == RDHPropertyTypeCharacterString || type == RDHPropertyTypeClass;
+    return [self canAssignNumber:type] || type == RDHPropertyTypeClass;
 }
 
 @end

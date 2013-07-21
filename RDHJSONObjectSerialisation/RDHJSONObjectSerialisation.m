@@ -107,40 +107,4 @@
     return [value conformsToProtocol:@protocol(RDHJSONObjectSerialisationProtocol)];
 }
 
-+(NSString *)stringForDecimalNumber:(NSDecimalNumber *)number
-{
-    if (number) {
-        return [[self decimalNumberFormatter] stringFromNumber:number];
-    } else {
-        return nil;
-    }
-}
-
-+(NSDecimalNumber *)decimalNumberForString:(NSString *)string
-{
-    if (string) {
-        return (NSDecimalNumber *) [[self decimalNumberFormatter] numberFromString:string];
-    } else {
-        return nil;
-    }
-}
-
-+(NSNumberFormatter *)decimalNumberFormatter
-{
-    static NSNumberFormatter *decimalNumberFormatter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        decimalNumberFormatter = [NSNumberFormatter new];
-        
-        NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-        NSAssert(enUSPOSIXLocale, @"Cannot setup locale for en_US_POSIX");
-        
-        [decimalNumberFormatter setLocale:enUSPOSIXLocale];
-        [decimalNumberFormatter setLenient:YES];
-        [decimalNumberFormatter setGeneratesDecimalNumbers:YES];
-        [decimalNumberFormatter setNumberStyle:NSNumberFormatterScientificStyle];
-    });
-    return decimalNumberFormatter;
-}
-
 @end

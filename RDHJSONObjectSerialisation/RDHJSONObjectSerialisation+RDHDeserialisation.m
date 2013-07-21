@@ -37,7 +37,10 @@
         NSMutableArray *array = [NSMutableArray arrayWithCapacity:[JSONObject count]];
         
         for (id item in JSONObject) {
-            id object = [self objectOfKind:cls forJSONObject:item options:options];
+            id object = item;
+            if (![[self class] isValidJSONPrimativeClass:cls]) {
+                object = [self objectOfKind:cls forJSONObject:object options:options];
+            }
             [array addObject:object];
         }
         
@@ -55,11 +58,22 @@
             
             if (info.canDeserialise && info.canSetValue) {
                 
-                id jsonValue = JSONObject[info.serialisationName];
-                
-                id value = [self objectForJSONObject:jsonValue withInfo:info options:options];
-                
-                [info setValue:value onObject:object];
+                @try {
+                    if ([RDHPropertyInfo typeImplmented:info.type]) {
+                        id jsonValue = JSONObject[info.serialisationName];
+                        
+                        id value = [self objectForJSONObject:jsonValue withInfo:info options:options];
+                        
+                        [info setValue:value onObject:object];
+                        
+                    } else {
+                        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"Serialisation has not been implemented for the type %@ for property %@ declared in class %@", [RDHPropertyInfo stringForType:info.type orClass:info.typeClass], info.name, NSStringFromClass(info.declaingClass)] userInfo:nil];
+                    }
+                } @catch (NSException *exception) {
+                    if (options & RDHJSONWritingOptionsRaiseExceptions) {
+                        [exception raise];
+                    }
+                }
             }
         }
         
@@ -75,7 +89,28 @@
             // Ignore nulls
         } else {
             
-//            if (info.type == RDH)
+            if ([[self class] isValidJSONPrimative:JSONObject]) {
+                return JSONObject;
+            } else if ([JSONObject isKindOfClass:[NSArray class]]) {
+                return [self objectOfKind:[info classForObjectsIfArray] forJSONObject:JSONObject options:options];
+            } else if ([JSONObject isKindOfClass:[NSDictionary class]]) {
+                
+                NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:[JSONObject count]];
+                for (NSString *key in JSONObject) {
+                    
+                    Class cls = [info classForObjectIfDictionaryPropertyWithKey:key];
+                    id JSONValue = JSONObject[key];
+                    
+                    if (cls && JSONValue) {
+                        id value = JSONValue;
+                        if (![[self class] isValidJSONPrimativeClass:cls]) {
+                            value = [self objectOfKind:cls forJSONObject:value options:options];
+                        }
+                        [dict setValue:value forKey:key];
+                    }
+                }
+                return [dict copy];
+            }
             
         }
     }
