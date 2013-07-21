@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RDHJSONObjectSerialisation.h"
+#import "RDHJSONObjectSerialisationProtocol.h"
 
 @interface SimpleObject : NSObject<RDHJSONObjectSerialisationProtocol>
 

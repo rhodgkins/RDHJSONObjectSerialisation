@@ -10,6 +10,6 @@
 
 @interface ExtendedSimpleObject : SimpleObject
 
-@property (nonatomic, copy) NSString *interfacPropertySubClass;
+@property (nonatomic, copy, getter = IPSC, setter = setIPSC:) NSString *interfacPropertySubClass;
 
 @end

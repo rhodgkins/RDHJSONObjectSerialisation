@@ -26,13 +26,14 @@
     self = [self init];
     if (self) {
         _valueProperty = value;
+        _decimalProperty = [NSDecimalNumber decimalNumberWithString:@"234e-3"];
     }
     return self;
 }
 
 -(NSString *)description
 {
-    return [NSString stringWithFormat:@"%@ [valueProperty=%@]", [super description], self.valueProperty];
+    return [NSString stringWithFormat:@"%@ [valueProperty=%@, decimalProperty=%@]", [super description], self.valueProperty, self.decimalProperty];
 }
 
 -(NSString *)debugDescription

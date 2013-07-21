@@ -18,6 +18,12 @@
 		4454A82F179878FC00D87297 /* ExtendedSimpleObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4454A82D179878FC00D87297 /* ExtendedSimpleObject.m */; };
 		4454A83217988ACA00D87297 /* AnotherSimpleObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4454A83117988ACA00D87297 /* AnotherSimpleObject.m */; };
 		4454A83317988ACA00D87297 /* AnotherSimpleObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4454A83117988ACA00D87297 /* AnotherSimpleObject.m */; };
+		44B078D1179C035F001A73DE /* RDHPropertyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B078D0179C035F001A73DE /* RDHPropertyInfo.m */; };
+		44B078D2179C035F001A73DE /* RDHPropertyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B078D0179C035F001A73DE /* RDHPropertyInfo.m */; };
+		44B078D7179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B078D6179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.m */; };
+		44B078D8179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B078D6179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.m */; };
+		44B078DB179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B078DA179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.m */; };
+		44B078DC179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B078DA179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.m */; };
 		44DCFAA817989C9000C2DDE0 /* RDHJSONObjectSerialisation.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DCFAA717989C9000C2DDE0 /* RDHJSONObjectSerialisation.m */; };
 		44DCFAA917989C9000C2DDE0 /* RDHJSONObjectSerialisation.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DCFAA717989C9000C2DDE0 /* RDHJSONObjectSerialisation.m */; };
 /* End PBXBuildFile section */
@@ -38,6 +44,14 @@
 		4454A82D179878FC00D87297 /* ExtendedSimpleObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtendedSimpleObject.m; sourceTree = "<group>"; };
 		4454A83017988ACA00D87297 /* AnotherSimpleObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnotherSimpleObject.h; sourceTree = "<group>"; };
 		4454A83117988ACA00D87297 /* AnotherSimpleObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnotherSimpleObject.m; sourceTree = "<group>"; };
+		44B078CF179C035F001A73DE /* RDHPropertyInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RDHPropertyInfo.h; path = ../../../RDHJSONObjectSerialisation/RDHPropertyInfo.h; sourceTree = "<group>"; };
+		44B078D0179C035F001A73DE /* RDHPropertyInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RDHPropertyInfo.m; path = ../../../RDHJSONObjectSerialisation/RDHPropertyInfo.m; sourceTree = "<group>"; };
+		44B078D3179C1104001A73DE /* RDHJSONObjectSerialisationProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RDHJSONObjectSerialisationProtocol.h; path = ../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisationProtocol.h; sourceTree = "<group>"; };
+		44B078D4179C3138001A73DE /* RDHJSONObjectSerialisation_RDHInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RDHJSONObjectSerialisation_RDHInternal.h; path = ../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation_RDHInternal.h; sourceTree = "<group>"; };
+		44B078D5179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RDHJSONObjectSerialisation+RDHSerialisation.h"; path = "../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation+RDHSerialisation.h"; sourceTree = "<group>"; };
+		44B078D6179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RDHJSONObjectSerialisation+RDHSerialisation.m"; path = "../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation+RDHSerialisation.m"; sourceTree = "<group>"; };
+		44B078D9179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RDHJSONObjectSerialisation+RDHDeserialisation.h"; path = "../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation+RDHDeserialisation.h"; sourceTree = "<group>"; };
+		44B078DA179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RDHJSONObjectSerialisation+RDHDeserialisation.m"; path = "../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation+RDHDeserialisation.m"; sourceTree = "<group>"; };
 		44DCFAA617989C9000C2DDE0 /* RDHJSONObjectSerialisation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RDHJSONObjectSerialisation.h; path = ../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation.h; sourceTree = "<group>"; };
 		44DCFAA717989C9000C2DDE0 /* RDHJSONObjectSerialisation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RDHJSONObjectSerialisation.m; path = ../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -144,8 +158,16 @@
 		44DCFAA517989C7B00C2DDE0 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				44B078D3179C1104001A73DE /* RDHJSONObjectSerialisationProtocol.h */,
 				44DCFAA617989C9000C2DDE0 /* RDHJSONObjectSerialisation.h */,
 				44DCFAA717989C9000C2DDE0 /* RDHJSONObjectSerialisation.m */,
+				44B078D4179C3138001A73DE /* RDHJSONObjectSerialisation_RDHInternal.h */,
+				44B078D5179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.h */,
+				44B078D6179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.m */,
+				44B078D9179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.h */,
+				44B078DA179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.m */,
+				44B078CF179C035F001A73DE /* RDHPropertyInfo.h */,
+				44B078D0179C035F001A73DE /* RDHPropertyInfo.m */,
 			);
 			name = Classes;
 			path = "Dummy Objects";
@@ -251,6 +273,9 @@
 				4454A82F179878FC00D87297 /* ExtendedSimpleObject.m in Sources */,
 				4454A83317988ACA00D87297 /* AnotherSimpleObject.m in Sources */,
 				44DCFAA917989C9000C2DDE0 /* RDHJSONObjectSerialisation.m in Sources */,
+				44B078D2179C035F001A73DE /* RDHPropertyInfo.m in Sources */,
+				44B078D8179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.m in Sources */,
+				44B078DC179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,6 +288,9 @@
 				4454A82E179878FC00D87297 /* ExtendedSimpleObject.m in Sources */,
 				4454A83217988ACA00D87297 /* AnotherSimpleObject.m in Sources */,
 				44DCFAA817989C9000C2DDE0 /* RDHJSONObjectSerialisation.m in Sources */,
+				44B078D1179C035F001A73DE /* RDHPropertyInfo.m in Sources */,
+				44B078D7179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.m in Sources */,
+				44B078DB179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

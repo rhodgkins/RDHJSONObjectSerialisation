@@ -12,6 +12,8 @@
 
 @interface SimpleObject ()
 
+@property (nonatomic, copy) NSString *notIncludedProperty;
+
 @property (nonatomic, copy) NSString *interfacExtProperty;
 
 @property (nonatomic, copy) NSArray *nilArrayInterfaceExtProperty;
@@ -37,7 +39,7 @@
 
 +(BOOL)shouldSerialiseProperty:(NSString *)propertyName
 {
-    if ([propertyName isEqualToString:@"interfaceProperty"]) {
+    if ([propertyName isEqualToString:@"notIncludedProperty"]) {
         return NO;
     } else {
         return YES;

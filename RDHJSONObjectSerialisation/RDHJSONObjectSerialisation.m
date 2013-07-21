@@ -10,6 +10,8 @@
 
 #import <objc/runtime.h>
 
+#import "RDHJSONObjectSerialisation_RDHInternal.h"
+
 #ifdef DEBUG
 #   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 #else
@@ -19,158 +21,126 @@
 // ALog always displays output regardless of the DEBUG setting
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 
-#define IS_OBJECT(T) _Generic( (T), id: YES, default: NO)
-
-@interface RDHJSONObjectSerialisation ()
-
-@end
-
 @implementation RDHJSONObjectSerialisation
 
-+(NSSet *)propertiesForClass:(Class)cls
+-(NSOrderedSet *)propertiesForClass:(Class)cls
 {
-    NSMutableSet *properties = [NSMutableSet set];
+    NSValue *key = [NSValue valueWithNonretainedObject:cls];
     
-    do {
-        uint32_t outCount;
-        objc_property_t *ps = class_copyPropertyList(cls, &outCount);
+    // See if we've got a cached value
+    NSOrderedSet *set = self.classPropertyCache[key];
+    if (!set) {
         
-        for (NSUInteger i=0; i<outCount; i++) {
-            objc_property_t p = ps[i];
+        NSMutableOrderedSet *properties = [NSMutableOrderedSet orderedSet];
+        
+        do {
+            uint32_t outCount;
+            objc_property_t *ps = class_copyPropertyList(cls, &outCount);
             
-            const char *propertyName = property_getName(p);
-            
-            [properties addObject:[NSString stringWithUTF8String:propertyName]];
-        }
-        
-        cls = [cls superclass];
-        
-    } while (cls && ![[NSObject class] isKindOfClass:cls]);
-    
-    return [properties copy];
-}
-
-+(NSDictionary *)dictionaryForObject:(NSObject<RDHJSONObjectSerialisationProtocol> *)object options:(RDHJSONWritingOptions)options
-{
-    if (!object) {
-        return nil;
-    }
-    NSAssert([self canSerialiseToJSON:object] || [NSJSONSerialization isValidJSONObject:object], @"Object is not able to be serialised: %@", object);
-    
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    
-    NSSet *properties = [self propertiesForClass:[object class]];
-    
-    Class cls = [object class];
-    const BOOL hasShouldSerialiseProperty = [cls respondsToSelector:@selector(shouldSerialiseProperty:)];
-    const BOOL hasSerialisationNameForProperty = [cls respondsToSelector:@selector(serialisationNameForProperty:)];
-    
-    for (NSString *property in properties) {
-        
-        if (!hasShouldSerialiseProperty || [cls shouldSerialiseProperty:property]) {
-            
-            NSString *key = nil;
-            if (hasSerialisationNameForProperty) {
-                key = [cls serialisationNameForProperty:property];
-            }
-            if (!key) {
-                key = property;
+            for (NSUInteger i=0; i<outCount; i++) {
+                objc_property_t p = ps[i];
+                
+                RDHPropertyInfo *info = [RDHPropertyInfo infoForProperty:p declaredInClass:cls];
+                
+                // Parse and add properties
+                [properties addObject:info];
             }
             
-            id value = [object valueForKey:property];
-            
-            [dict setValue:[self JSONForObject:value options:options] forKey:key];
-            
-//            NSLog(@"(%@) %@ : %@ -> %@ (%d)", property, [value class], value, dict[key], [self isValidJSONPrimative:value]);
-        }
-    }
-    
-    return dict;
-}
-
-+(id)JSONForObject:(id)value options:(RDHJSONWritingOptions)options
-{
-    if (value) {
-        if ([NSJSONSerialization isValidJSONObject:value]) {
-            return value;
-            
-        } else if ([self isValidJSONPrimative:value]) {
-            return value;
-            
-        } else if ([value isKindOfClass:[NSArray class]]) {
-            return [self JSONForArray:value options:options];
-            
-        } else if ([value isKindOfClass:[NSDictionary class]]) {
-            return [self JSONForDictionary:value options:options];
-            
-        } else if ([self canSerialiseToJSON:value]) {
-            return [self dictionaryForObject:value options:options];
-        }
-        
-    } else {
-        if (options & RDHJSONWritingOptionsConvertNilsToNSNulls) {
-            return [NSNull null];
-        }
-    }
-    
-    return nil;
-}
-
-+(NSArray *)JSONForArray:(NSArray *)array options:(RDHJSONWritingOptions)options
-{
-    NSMutableArray *json = [NSMutableArray arrayWithCapacity:[array count]];
-    
-    for (id a in array) {
-        id v = [self JSONForObject:a options:options];
-        if (v) {
-            // Can only store valid JSON objects
-            [json addObject:v];
-        }
-    }
-    
-    return json;
-}
-
-+(NSDictionary *)JSONForDictionary:(NSDictionary *)dict options:(RDHJSONWritingOptions)options
-{
-    NSMutableDictionary *json = [NSMutableDictionary dictionaryWithCapacity:[dict count]];
-    
-    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-       
-        if ([key isKindOfClass:[NSString class]]) {
-            // Can only use string keys
-            id v = [self JSONForObject:obj options:options];
-            if (v) {
-                json[key] = v;
+            if (ps) {
+                free(ps);
             }
-        }
-    }];
-    
-    return json;
+            ps = NULL;
+            
+            cls = [cls superclass];
+            
+        } while (cls && ![[NSObject class] isKindOfClass:cls]);
+        
+        // Now revsere so properties are serialised from super class down
+        set = [properties reversedOrderedSet];
+        
+        // Cache value
+        self.classPropertyCache[key] = set;
+    }
+    return set;
 }
 
 +(BOOL)isValidJSONPrimative:(id)value
 {
-    if ([value isKindOfClass:[NSString class]]) {
-        return YES;
-    } else if ([value isKindOfClass:[NSNumber class]]) {
+    if ([self isValidJSONPrimativeClass:[value class]]) {
         
-        // Don't allow NaN or Inifity as per JSON spec
-        if ([@(INFINITY) isEqualToNumber:value]) {
-            return NO;
-        } else if ([@(NAN) isEqualToNumber:value]) {
-            return NO;
-        } else {
-            return YES;
+        if ([value isKindOfClass:[NSDecimalNumber class]]) {
+            
+            // Don't allow NaN JSON spec
+            if ([[NSDecimalNumber notANumber] isEqualToNumber:value]) {
+                return NO;
+            }
+            
+        } else if ([value isKindOfClass:[NSNumber class]]) {
+            
+            // Don't allow NaN or Inifity as per JSON spec
+            if ([@(INFINITY) isEqualToNumber:value] || [@(NAN) isEqualToNumber:value]) {
+                return NO;
+            }
         }
+        
+        return YES;
     } else {
         return NO;
     }
 }
 
-+(BOOL)canSerialiseToJSON:(id)value
++(BOOL)isValidJSONPrimativeClass:(Class)cls
+{
+    if ([cls isSubclassOfClass:[NSString class]]) {
+        return YES;
+    } else if ([cls isSubclassOfClass:[NSDecimalNumber class]]) {
+        return YES;
+    } else if ([cls isSubclassOfClass:[NSNumber class]]) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
++(BOOL)conformsToSerialisationProtocol:(id)value
 {
     return [value conformsToProtocol:@protocol(RDHJSONObjectSerialisationProtocol)];
+}
+
++(NSString *)stringForDecimalNumber:(NSDecimalNumber *)number
+{
+    if (number) {
+        return [[self decimalNumberFormatter] stringFromNumber:number];
+    } else {
+        return nil;
+    }
+}
+
++(NSDecimalNumber *)decimalNumberForString:(NSString *)string
+{
+    if (string) {
+        return (NSDecimalNumber *) [[self decimalNumberFormatter] numberFromString:string];
+    } else {
+        return nil;
+    }
+}
+
++(NSNumberFormatter *)decimalNumberFormatter
+{
+    static NSNumberFormatter *decimalNumberFormatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        decimalNumberFormatter = [NSNumberFormatter new];
+        
+        NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        NSAssert(enUSPOSIXLocale, @"Cannot setup locale for en_US_POSIX");
+        
+        [decimalNumberFormatter setLocale:enUSPOSIXLocale];
+        [decimalNumberFormatter setLenient:YES];
+        [decimalNumberFormatter setGeneratesDecimalNumbers:YES];
+        [decimalNumberFormatter setNumberStyle:NSNumberFormatterScientificStyle];
+    });
+    return decimalNumberFormatter;
 }
 
 @end

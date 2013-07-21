@@ -14,7 +14,7 @@
 
 @property (nonatomic, copy) NSString *interfacExtPropertySubClass;
 
-@property (nonatomic, assign) BOOL boolExtPropertySubClass;
+@property (nonatomic, assign, getter = isBoolExtPropertySubClass) BOOL boolExtPropertySubClass;
 
 @property (nonatomic, strong) AnotherSimpleObject *protocolExtPropertyObject;
 

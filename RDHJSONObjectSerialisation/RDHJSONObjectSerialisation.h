@@ -8,22 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol RDHJSONObjectSerialisationProtocol <NSObject>
-
-@optional
-
-+(BOOL)shouldSerialiseProperty:(NSString *)propertyName;
-
-+(NSString *)serialisationNameForProperty:(NSString *)propertyName;
-
-@end
-
-typedef NS_OPTIONS(NSUInteger, RDHJSONWritingOptions) {
-    RDHJSONWritingOptionsConvertNilsToNSNulls = (1UL << 0)
-};
-
+/**
+ *
+ */
 @interface RDHJSONObjectSerialisation : NSObject
 
-+(NSDictionary *)dictionaryForObject:(NSObject<RDHJSONObjectSerialisationProtocol> *)object options:(RDHJSONWritingOptions)options;
-
 @end
+
+#import "RDHJSONObjectSerialisation+RDHSerialisation.h"
+#import "RDHJSONObjectSerialisation+RDHDeserialisation.h"
