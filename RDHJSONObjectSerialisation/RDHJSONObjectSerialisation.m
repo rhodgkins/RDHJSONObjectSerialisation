@@ -23,6 +23,11 @@
 
 @implementation RDHJSONObjectSerialisation
 
++(void)setGlobalDateFormatter:(NSDateFormatter *)dateFormatter
+{
+    [RDHPropertyInfo setDateFormatter:dateFormatter];
+}
+
 -(NSOrderedSet *)propertiesForClass:(Class)cls
 {
     NSValue *key = [NSValue valueWithNonretainedObject:cls];

@@ -26,7 +26,6 @@
 
 -(id)objectOfKind:(Class)cls forJSONObject:(id)JSONObject options:(RDHJSONReadingOptions)options
 {
-    NSParameterAssert(cls);
     NSParameterAssert(JSONObject);
     
     if ([cls isSubclassOfClass:[NSDictionary class]] && [JSONObject isKindOfClass:cls]) {
@@ -38,8 +37,12 @@
         
         for (id item in JSONObject) {
             id object = item;
-            if (![[self class] isValidJSONPrimativeClass:cls]) {
-                object = [self objectOfKind:cls forJSONObject:object options:options];
+            Class automaticClass = [object class];
+            if (cls) {
+                automaticClass = cls;
+            }
+            if (![[self class] isValidJSONPrimativeClass:automaticClass]) {
+                object = [self objectOfKind:automaticClass forJSONObject:object options:options];
             }
             [array addObject:object];
         }
@@ -47,6 +50,7 @@
         return [array copy];
         
     } else {
+        NSParameterAssert(cls);
         
         NSAssert([[self class] conformsToSerialisationProtocol:cls], @"Object does not conform to %@", NSStringFromProtocol(@protocol(RDHJSONObjectSerialisationProtocol)));
         
@@ -98,13 +102,18 @@
                 NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:[JSONObject count]];
                 for (NSString *key in JSONObject) {
                     
-                    Class cls = [info classForObjectIfDictionaryPropertyWithKey:key];
                     id JSONValue = JSONObject[key];
                     
-                    if (cls && JSONValue) {
+                    Class cls = [info classForObjectIfDictionaryPropertyWithKey:key];
+                    Class automaticClass = [JSONValue class];
+                    if (cls) {
+                        automaticClass = cls;
+                    }
+                    
+                    if (automaticClass && JSONValue) {
                         id value = JSONValue;
-                        if (![[self class] isValidJSONPrimativeClass:cls]) {
-                            value = [self objectOfKind:cls forJSONObject:value options:options];
+                        if (![[self class] isValidJSONPrimativeClass:automaticClass]) {
+                            value = [self objectOfKind:automaticClass forJSONObject:value options:options];
                         }
                         [dict setValue:value forKey:key];
                     }

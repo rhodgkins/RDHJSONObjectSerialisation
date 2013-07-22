@@ -10,6 +10,7 @@
 
 typedef NS_OPTIONS(NSUInteger, RDHJSONWritingOptions) {
     RDHJSONWritingOptionsConvertNilsToNSNulls = (1UL << 0),
+    RDHJSONWritingOptionsConvertDatesToUnixTimestamps = (1UL << 1),
     RDHJSONWritingOptionsRaiseExceptions = (1UL << 31)
 };
 

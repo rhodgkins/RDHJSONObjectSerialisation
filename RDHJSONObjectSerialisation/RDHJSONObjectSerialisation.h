@@ -13,6 +13,8 @@
  */
 @interface RDHJSONObjectSerialisation : NSObject
 
++(void)setGlobalDateFormatter:(NSDateFormatter *)dateFormatter;
+
 @end
 
 #import "RDHJSONObjectSerialisation+RDHSerialisation.h"

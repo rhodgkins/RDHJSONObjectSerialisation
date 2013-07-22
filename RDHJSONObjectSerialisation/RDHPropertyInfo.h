@@ -40,6 +40,9 @@ typedef NS_ENUM(char, RDHPropertyType) {
 
 @interface RDHPropertyInfo : NSObject
 
++(NSDateFormatter *)dateFormatter;
++(void)setDateFormatter:(NSDateFormatter *)dateFormatter;
+
 +(instancetype)infoForProperty:(objc_property_t)prop declaredInClass:(Class)declaringClass;
 
 @property (nonatomic, assign, readonly) Class declaingClass;

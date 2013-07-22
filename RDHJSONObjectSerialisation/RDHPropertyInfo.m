@@ -271,6 +271,8 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
             return YES;
         } else if ([value isKindOfClass:[NSString class]]) {
             return [self.typeClass isSubclassOfClass:[NSNumber class]];
+        } else if ([self.typeClass isSubclassOfClass:[NSDate class]]) {
+            return [value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]];
         }
     } else {
         
@@ -278,6 +280,8 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
             return [[self class] canAssignNumber:self.type];
         } else if ([value isKindOfClass:[NSString class]]) {
             return [[self class] canAssignString:self.type];
+        } else if ([value isKindOfClass:[NSDate class]]) {
+            [[self class] canAssignNumber:self.type];
         }
         
     }
@@ -297,6 +301,14 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
             value = [RDHUtils decimalNumberForString:value];
         } else if ([self.typeClass isSubclassOfClass:[NSNumber class]]) {
             value = [RDHUtils numberForString:value];
+        } else if ([self.typeClass isSubclassOfClass:[NSData class]]) {
+            value = [RDHUtils dataFromBase64String:value];
+        } else if ([self.typeClass isSubclassOfClass:[NSDate class]]) {
+            if ([value isKindOfClass:[NSString class]]) {
+                value = [[[self class] dateFormatter] dateFromString:value];
+            } else if ([value isKindOfClass:[NSNumber class]]) {
+                value = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]];
+            }
         }
     } else if ([[self class] canAssignNumber:self.type]) {
         if ([value isKindOfClass:[NSString class]]) {
@@ -587,6 +599,22 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
 +(BOOL)canAssignString:(RDHPropertyType)type
 {
     return [self canAssignNumber:type] || type == RDHPropertyTypeClass;
+}
+
+static NSDateFormatter *_static_dateFormatter;
+
++(void)setDateFormatter:(NSDateFormatter *)dateFormatter
+{
+    _static_dateFormatter = dateFormatter;
+}
+
++(NSDateFormatter *)dateFormatter
+{
+    if (_static_dateFormatter) {
+        return _static_dateFormatter;
+    } else {
+        return [RDHUtils ISO8601DateFormatter];
+    }
 }
 
 @end

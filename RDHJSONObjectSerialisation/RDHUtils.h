@@ -10,10 +10,16 @@
 
 @interface RDHUtils : NSObject
 
++(NSDateFormatter *)ISO8601DateFormatter;
+
 +(NSString *)stringForDecimalNumber:(NSDecimalNumber *)number;
 
 +(NSDecimalNumber *)decimalNumberForString:(NSString *)string;
 
 +(NSNumber *)numberForString:(NSString *)string;
+
++(NSData *)dataFromBase64String:(NSString *)encoding;
+
++(NSString *)base64StringFromData:(NSData *)data;
 
 @end

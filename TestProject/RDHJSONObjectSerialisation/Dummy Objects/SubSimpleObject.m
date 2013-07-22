@@ -82,6 +82,18 @@
                             };
         
         _cocoaObjectProp = [NSNotification notificationWithName:@"DUMMY" object:nil];
+        
+        _dataProp = [@"BASE 64 ENCODED STRING" dataUsingEncoding:NSUTF8StringEncoding];
+        
+        _dateProp = [NSDate date];
+        
+        _automaticStringArrayProp = @[@"S1", @"S2", @"S3"];
+        _automaticNumberArrayProp = @[@(234324), @(.5), @(234)];
+        
+        _automaticStringDictProp = @{@"KS1" : @"SV1", @"KS2" : @"SV2", @"KS3" : @"SV3", @"KS4" : @"SV4"};
+        _automaticNumberDictProp = @{@"KN1" : @324, @"KN2" : @.62, @"KN3" : @345, @"KN4" : @8924582459};
+        
+        _nonAutomaticObjectArrayProp = @[[NSObject class]];
     }
     return self;
 }

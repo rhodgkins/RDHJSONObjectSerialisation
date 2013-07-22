@@ -48,4 +48,16 @@ static NSString *const RDH_KEY_CUSTOM = @"CUSTOM_OBJECT";
 
 @property (nonatomic, strong) NSDictionary *dictObjectProp;
 
+@property (nonatomic, strong) NSData *dataProp;
+
+@property (nonatomic, strong) NSDate *dateProp;
+
+@property (nonatomic, strong) NSArray *automaticStringArrayProp;
+@property (nonatomic, strong) NSArray *automaticNumberArrayProp;
+
+@property (nonatomic, strong) NSDictionary *automaticStringDictProp;
+@property (nonatomic, strong) NSDictionary *automaticNumberDictProp;
+
+@property (nonatomic, strong) NSArray *nonAutomaticObjectArrayProp;
+
 @end

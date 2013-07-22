@@ -13,18 +13,6 @@
 @optional
 
 /**
- * Used for deserialisation.
- * @returns class of the items in the array property. Arrays containing different types are not supported.
- */
-+(Class)classForObjectsInArrayProperty:(NSString *)property;
-
-/**
- * Used for deserialisation.
- * @returns class of the item in the dictionary property. Arrays containing different types are not supported.
- */
-+(Class)classForObjectWithKey:(NSString *)key forDictionaryProperty:(NSString *)property;
-
-/**
  * @returns YES if this property should be included in the JSON output, NO otherwise.
  */
 +(BOOL)shouldSerialiseProperty:(NSString *)propertyName;
@@ -39,8 +27,28 @@
  */
 +(NSString *)serialisationNameForProperty:(NSString *)propertyName;
 
+/**
+ * Used for deserialisation. If the objects inside this array are simple types (NSString, NSNumber, NSDate, NSData, NSArray, NSDictionary) then they will be automatically deserialised.
+ * @returns class of the items in the array property. Arrays containing different types are not supported. Return nil for attempted automatic deserialisation.
+ */
++(Class)classForObjectsInArrayProperty:(NSString *)property;
+
+/**
+ * Used for deserialisation. If the objects inside this dictionary are simple types (NSString, NSNumber, NSDate, NSData, NSArray, NSDictionary) then they will be automatically deserialised.
+ * @returns class of the item in the dictionary property. Return nil for attempted automatic deserialisation.
+ */
++(Class)classForObjectWithKey:(NSString *)key forDictionaryProperty:(NSString *)property;
+
+/**
+ * This method can be used for custom serialisation of property values. For example, say this property is declared as a NSDate, you might want to serialise it to a string of a certain format in the JSON.
+ * @returns the custom serialisation value, or the value itself if no serailisation is desired.
+ */
 +(id)serialisationValueForValue:(id)value forProperty:(NSString *)propertyName;
 
+/**
+ * This method can be used for custom serialisation of property values. For example, say the JSON value is a string and the property is declared as a NSDate, you can use this method to parse the string to a valid NSDate from a custom format.
+ * @returns the custom deserialisation value, or the value itself if no deserialisation is desired.
+ */
 +(id)deserialisationValueForValue:(id)value forProperty:(NSString *)propertyName;
 
 @end
