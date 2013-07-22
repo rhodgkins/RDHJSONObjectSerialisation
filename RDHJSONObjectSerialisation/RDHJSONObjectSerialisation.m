@@ -28,6 +28,32 @@
     [RDHPropertyInfo setDateFormatter:dateFormatter];
 }
 
++(NSMutableDictionary *)globalClassPropertyCache
+{
+    static NSMutableDictionary *globalClassPropertyCache;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        globalClassPropertyCache = [NSMutableDictionary dictionary];
+    });
+    return globalClassPropertyCache;
+}
+
+-(instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _classPropertyCache = [[[self class] globalClassPropertyCache] mutableCopy];
+    }
+    return self;
+}
+
+-(void)dealloc
+{
+    [[[self class] globalClassPropertyCache] addEntriesFromDictionary:_classPropertyCache];
+    [_classPropertyCache removeAllObjects];
+    _classPropertyCache = nil;
+}
+
 -(NSOrderedSet *)propertiesForClass:(Class)cls
 {
     NSValue *key = [NSValue valueWithNonretainedObject:cls];

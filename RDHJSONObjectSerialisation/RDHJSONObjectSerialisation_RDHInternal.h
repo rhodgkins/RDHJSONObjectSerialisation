@@ -18,7 +18,9 @@
 
 @interface RDHJSONObjectSerialisation ()
 
-@property (nonatomic, copy) NSMutableDictionary *classPropertyCache;
++(NSMutableDictionary *)globalClassPropertyCache;
+
+@property (nonatomic, copy, readonly) NSMutableDictionary *classPropertyCache;
 
 -(NSOrderedSet *)propertiesForClass:(Class)cls;
 
