@@ -32,9 +32,6 @@
 		4454A805179870C600D87297 /* RDHJsonObjectSerialisationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RDHJsonObjectSerialisationTests.m; sourceTree = "<group>"; };
 		4454A80C179870E700D87297 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4454A8161798768C00D87297 /* RDHJSONObjectSerialisation */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RDHJSONObjectSerialisation; sourceTree = BUILT_PRODUCTS_DIR; };
-		4454A8191798768C00D87297 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		4454A81C1798768C00D87297 /* RDHJSONObjectSerialisation-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RDHJSONObjectSerialisation-Prefix.pch"; sourceTree = "<group>"; };
-		4454A81D1798768C00D87297 /* RDHJSONObjectSerialisation.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = RDHJSONObjectSerialisation.1; sourceTree = "<group>"; };
 		4454A823179876D900D87297 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		44B078CF179C035F001A73DE /* RDHPropertyInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RDHPropertyInfo.h; path = ../../../RDHJSONObjectSerialisation/RDHPropertyInfo.h; sourceTree = "<group>"; };
 		44B078D0179C035F001A73DE /* RDHPropertyInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RDHPropertyInfo.m; path = ../../../RDHJSONObjectSerialisation/RDHPropertyInfo.m; sourceTree = "<group>"; };
@@ -78,7 +75,6 @@
 			children = (
 				4454A7E41798705B00D87297 /* RDHJSONObjectSerialisation */,
 				4454A7FE179870C600D87297 /* RDHJsonObjectSerialisationTests */,
-				4454A8181798768C00D87297 /* RDHJSONObjectSerialisation */,
 				4454A7E11798705B00D87297 /* Frameworks */,
 				4454A7E01798705B00D87297 /* Products */,
 			);
@@ -118,24 +114,6 @@
 				4454A805179870C600D87297 /* RDHJsonObjectSerialisationTests.m */,
 			);
 			path = RDHJsonObjectSerialisationTests;
-			sourceTree = "<group>";
-		};
-		4454A8181798768C00D87297 /* RDHJSONObjectSerialisation */ = {
-			isa = PBXGroup;
-			children = (
-				4454A8191798768C00D87297 /* main.m */,
-				4454A81D1798768C00D87297 /* RDHJSONObjectSerialisation.1 */,
-				4454A81B1798768C00D87297 /* Supporting Files */,
-			);
-			path = RDHJSONObjectSerialisation;
-			sourceTree = "<group>";
-		};
-		4454A81B1798768C00D87297 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4454A81C1798768C00D87297 /* RDHJSONObjectSerialisation-Prefix.pch */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		4454A827179878A200D87297 /* Dummy Objects */ = {
