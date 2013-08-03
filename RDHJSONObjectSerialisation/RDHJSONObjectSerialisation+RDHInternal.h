@@ -16,11 +16,7 @@
 
 #import "RDHUtils.h"
 
-@interface RDHJSONObjectSerialisation ()
-
-+(NSMutableDictionary *)globalClassPropertyCache;
-
-@property (nonatomic, copy, readonly) NSMutableDictionary *classPropertyCache;
+@interface RDHJSONObjectSerialisation (RDHInternal)
 
 -(NSOrderedSet *)propertiesForClass:(Class)cls;
 

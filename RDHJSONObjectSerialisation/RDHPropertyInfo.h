@@ -40,11 +40,6 @@ typedef NS_ENUM(char, RDHPropertyType) {
 
 @interface RDHPropertyInfo : NSObject
 
-+(NSDateFormatter *)dateFormatter;
-+(void)setDateFormatter:(NSDateFormatter *)dateFormatter;
-
-+(instancetype)infoForProperty:(objc_property_t)prop declaredInClass:(Class)declaringClass;
-
 @property (nonatomic, assign, readonly) Class declaingClass;
 @property (nonatomic, copy, readonly) NSString *name;
 
@@ -87,15 +82,32 @@ typedef NS_ENUM(char, RDHPropertyType) {
 /// The property is a copy of the value last assigned (copy).
 @property (nonatomic, assign, readonly, getter = isCopying) BOOL copying;
 
--(BOOL)canSetValue;
+@end
+
+@interface RDHPropertyInfo (RDHPublicMethods)
+
++(instancetype)infoForProperty:(objc_property_t)prop declaredInClass:(Class)declaringClass;
 
 -(id)getValueFromObject:(id)object;
+
+-(BOOL)canSetValue;
 
 -(BOOL)setValue:(id)value onObject:(id)object;
 
 -(Class)classForObjectsIfArray;
 
 -(Class)classForObjectIfDictionaryPropertyWithKey:(NSString *)key;
+
+@end
+
+@interface RDHPropertyInfo (RDHDateFormatter)
+
++(NSDateFormatter *)dateFormatter;
++(void)setDateFormatter:(NSDateFormatter *)dateFormatter;
+
+@end
+
+@interface RDHPropertyInfo (RDHInfoMethods)
 
 +(BOOL)typeImplmented:(RDHPropertyType)type;
 

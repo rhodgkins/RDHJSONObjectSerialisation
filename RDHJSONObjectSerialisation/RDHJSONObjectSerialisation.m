@@ -5,21 +5,19 @@
 //  Created by Richard Hodgkins on 18/07/2013.
 //  Copyright (c) 2013 Rich H. All rights reserved.
 //
-
 #import "RDHJSONObjectSerialisation.h"
 
 #import <objc/runtime.h>
 
-#import "RDHJSONObjectSerialisation_RDHInternal.h"
+#import "RDHJSONObjectSerialisation+RDHInternal.h"
 
-#ifdef DEBUG
-#   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
-#else
-#   define DLog(...)
-#endif
+@interface RDHJSONObjectSerialisation ()
 
-// ALog always displays output regardless of the DEBUG setting
-#define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
++(NSMutableDictionary *)globalClassPropertyCache;
+
+@property (nonatomic, copy, readonly) NSMutableDictionary *classPropertyCache;
+
+@end
 
 @implementation RDHJSONObjectSerialisation
 
@@ -53,6 +51,10 @@
     [_classPropertyCache removeAllObjects];
     _classPropertyCache = nil;
 }
+
+@end
+
+@implementation RDHJSONObjectSerialisation (RDHInternal)
 
 -(NSOrderedSet *)propertiesForClass:(Class)cls
 {
@@ -101,7 +103,7 @@
         
         if ([value isKindOfClass:[NSDecimalNumber class]]) {
             
-            // Don't allow NaN JSON spec
+            // Don't allow NaN as per JSON spec
             if ([[NSDecimalNumber notANumber] isEqualToNumber:value]) {
                 return NO;
             }

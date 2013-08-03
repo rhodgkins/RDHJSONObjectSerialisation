@@ -47,6 +47,18 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
     }
 }
 
+@interface RDHPropertyInfo (RDHInfoMethodsPrivate)
+
++(BOOL)canAssignNumber:(RDHPropertyType)type;
+
++(BOOL)canAssignString:(RDHPropertyType)type;
+
++(RDHPropertyType)typeFromEncodedString:(NSString *)string;
+
++(Class)classFromEncodedClassString:(NSString *)classString;
+
+@end
+
 @interface RDHPropertyInfo ()
 
 @property (nonatomic, copy, readonly) NSString *getter;
@@ -63,6 +75,168 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
 @end
 
 @implementation RDHPropertyInfo
+
+-(id)serialisationValueForValue:(id)value
+{
+    if (self.hasCustomSerialisationMethod) {
+        return [self.declaingClass serialisationValueForValue:value forProperty:self.name];
+    } else {
+        return value;
+    }
+}
+
+-(id)deserialisationValueForValue:(id)value
+{
+    if (self.hasCustomDeserialisationMethod) {
+        return [self.declaingClass deserialisationValueForValue:value forProperty:self.name];
+    } else {
+        return value;
+    }
+}
+
+-(BOOL)checkType:(id)value
+{
+    if (!value) {
+        return YES;
+    }
+    // We need to make sure that the incoming value can be assigned to this property
+    
+    if (self.type == RDHPropertyTypeObject) {
+        // Only set if the types match or we're using id type
+        if ([value isKindOfClass:self.typeClass] || !self.typeClass) {
+            return YES;
+        } else if ([value isKindOfClass:[NSString class]]) {
+            return [self.typeClass isSubclassOfClass:[NSNumber class]];
+        } else if ([self.typeClass isSubclassOfClass:[NSDate class]]) {
+            return [value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]];
+        }
+    } else {
+        
+        if ([value isKindOfClass:[NSNumber class]]) {
+            return [[self class] canAssignNumber:self.type];
+        } else if ([value isKindOfClass:[NSString class]]) {
+            return [[self class] canAssignString:self.type];
+        } else if ([value isKindOfClass:[NSDate class]]) {
+            [[self class] canAssignNumber:self.type];
+        }
+        
+    }
+    
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"Cannot set value of class %@ on property %@ declared as type %@ in class %@", [value class], self.name, [[self class] stringForType:self.type orClass:self.typeClass], NSStringFromClass(self.declaingClass)] userInfo:nil];
+}
+
+-(id)specialValueForValue:(id)value
+{
+    // Convert special values
+    if (self.type == RDHPropertyTypeClass) {
+        value = NSClassFromString(value);
+        
+    } else if (self.type == RDHPropertyTypeObject) {
+        
+        if ([self.typeClass isSubclassOfClass:[NSDecimalNumber class]]) {
+            value = [RDHUtils decimalNumberForString:value];
+        } else if ([self.typeClass isSubclassOfClass:[NSNumber class]]) {
+            value = [RDHUtils numberForString:value];
+        } else if ([self.typeClass isSubclassOfClass:[NSData class]]) {
+            value = [RDHUtils dataFromBase64String:value];
+        } else if ([self.typeClass isSubclassOfClass:[NSDate class]]) {
+            if ([value isKindOfClass:[NSString class]]) {
+                value = [[[self class] dateFormatter] dateFromString:value];
+            } else if ([value isKindOfClass:[NSNumber class]]) {
+                value = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]];
+            }
+        }
+    } else if ([[self class] canAssignNumber:self.type]) {
+        if ([value isKindOfClass:[NSString class]]) {
+            // Convert to decimal number to preserve accuracy
+            value = [RDHUtils decimalNumberForString:value];
+        }
+    }
+    
+    return value;
+}
+
+-(NSString *)getterName
+{
+    return self.getter ? self.getter : self.name;
+}
+
+-(BOOL)isAssign
+{
+    return self.kind == RDHPropertyAttributeAssign;
+}
+
+-(BOOL)isWeak
+{
+    return self.kind == RDHPropertyAttributeWeak;
+}
+
+-(BOOL)isStrong
+{
+    return self.kind == RDHPropertyAttributeStrong;
+}
+
+-(BOOL)isCopying
+{
+    return self.kind == RDHPropertyAttributeCopy;
+}
+
+-(NSString *)debugDescription
+{
+    NSMutableString *s = [[super debugDescription] mutableCopy];
+    
+    [s appendString:@"[ \n\t"];
+    
+    [s appendFormat:@"name=%@, \n\t", self.name];
+    [s appendFormat:@"declaringClass=%@, \n\t", self.declaingClass];
+    [s appendFormat:@"derivedGetterName=%@, \n\t", self.getterName];
+    [s appendFormat:@"derivedSetterName=%@, \n\t", self.setter ? self.setter : self.name];
+    [s appendFormat:@"canSerialise=%d, \n\t", self.canSerialise];
+    [s appendFormat:@"canDeserialise=%d, \n\t", self.canDeserialise];
+    [s appendFormat:@"serialisationName=%@, \n\t", self.serialisationName];
+    
+    [s appendFormat:@"attributes=T%c", self.type];
+    if (self.type == RDHPropertyTypeObject && self.typeClass) {
+        [s appendFormat:@"\"%@\"", NSStringFromClass(self.typeClass)];
+    }
+    [s appendString:@","];
+    
+    if (self.readonly) {
+        [s appendFormat:@"%c,", RDHPropertyAttributeReadonly];
+    }
+    if (!self.assign) {
+        [s appendFormat:@"%c,", self.kind];
+    }
+    if (self.nonatomic) {
+        [s appendFormat:@"%c,", RDHPropertyAttributeNonAtomic];
+    }
+    
+    if (self.getter) {
+        [s appendFormat:@"%c%@,", RDHPropertyAttributeGetter, self.getter];
+    }
+    if (self.setter) {
+        [s appendFormat:@"%c%@,", RDHPropertyAttributeSetter, self.setter];
+    }
+    
+    if (self.dynamic) {
+        [s appendFormat:@"%c,", RDHPropertyAttributeDynamic];
+    }
+    if (self.eligibleForGarbageCollection) {
+        [s appendFormat:@"%c,", RDHPropertyAttributeEligibleForGarbageCollection];
+    }
+    
+    if (self.iVar) {
+        [s appendFormat:@"%c%s", RDHPropertyAttributeIVar, ivar_getName(self.iVar)];
+    }
+    
+    [s appendString:@"\n]"];
+    
+    return s;
+}
+
+@end
+
+@implementation RDHPropertyInfo (RDHPublicMethods)
 
 +(instancetype)infoForProperty:(objc_property_t)prop declaredInClass:(Class)declaringClass
 {
@@ -175,44 +349,9 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
     return self;
 }
 
--(id)serialisationValueForValue:(id)value
+-(BOOL)canSetValue
 {
-    if (self.hasCustomSerialisationMethod) {
-        return [self.declaingClass serialisationValueForValue:value forProperty:self.name];
-    } else {
-        return value;
-    }
-}
-
--(id)deserialisationValueForValue:(id)value
-{
-    if (self.hasCustomDeserialisationMethod) {
-        return [self.declaingClass deserialisationValueForValue:value forProperty:self.name];
-    } else {
-        return value;
-    }
-}
-
--(id)getValueFromObject:(id)object
-{
-    id value = [object valueForKey:[self getterName]];
-    // See if there was a custom serialiser and run it thru it
-    value = [self serialisationValueForValue:value];
-    if (self.type == RDHPropertyTypeObject && [self.typeClass isSubclassOfClass:[NSNumber class]]) {
-        
-        if ([value isKindOfClass:[NSNumber class]]) {
-            // Value is still NSNumber
-            value = [RDHUtils stringForDecimalNumber:value];
-        }
-        
-    } else if (self.type == RDHPropertyTypeClass) {
-        
-        if (class_isMetaClass(object_getClass(value))) {
-            // Value still a class
-            value = NSStringFromClass(value);
-        }
-    }
-    return value;
+    return !self.readonly || self.iVar;
 }
 
 -(BOOL)setValue:(id)value onObject:(id)object
@@ -258,96 +397,26 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
     return NO;
 }
 
--(BOOL)checkType:(id)value
+-(id)getValueFromObject:(id)object
 {
-    if (!value) {
-        return YES;
-    }
-    // We need to make sure that the incoming value can be assigned to this property
-    
-    if (self.type == RDHPropertyTypeObject) {
-        // Only set if the types match or we're using id type
-        if ([value isKindOfClass:self.typeClass] || !self.typeClass) {
-            return YES;
-        } else if ([value isKindOfClass:[NSString class]]) {
-            return [self.typeClass isSubclassOfClass:[NSNumber class]];
-        } else if ([self.typeClass isSubclassOfClass:[NSDate class]]) {
-            return [value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]];
-        }
-    } else {
+    id value = [object valueForKey:[self getterName]];
+    // See if there was a custom serialiser and run it thru it
+    value = [self serialisationValueForValue:value];
+    if (self.type == RDHPropertyTypeObject && [self.typeClass isSubclassOfClass:[NSNumber class]]) {
         
         if ([value isKindOfClass:[NSNumber class]]) {
-            return [[self class] canAssignNumber:self.type];
-        } else if ([value isKindOfClass:[NSString class]]) {
-            return [[self class] canAssignString:self.type];
-        } else if ([value isKindOfClass:[NSDate class]]) {
-            [[self class] canAssignNumber:self.type];
+            // Value is still NSNumber
+            value = [RDHUtils stringForDecimalNumber:value];
         }
         
-    }
-    
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"Cannot set value of class %@ on property %@ declared as type %@ in class %@", [value class], self.name, [[self class] stringForType:self.type orClass:self.typeClass], NSStringFromClass(self.declaingClass)] userInfo:nil];
-}
-
--(id)specialValueForValue:(id)value
-{
-    // Convert special values
-    if (self.type == RDHPropertyTypeClass) {
-        value = NSClassFromString(value);
+    } else if (self.type == RDHPropertyTypeClass) {
         
-    } else if (self.type == RDHPropertyTypeObject) {
-        
-        if ([self.typeClass isSubclassOfClass:[NSDecimalNumber class]]) {
-            value = [RDHUtils decimalNumberForString:value];
-        } else if ([self.typeClass isSubclassOfClass:[NSNumber class]]) {
-            value = [RDHUtils numberForString:value];
-        } else if ([self.typeClass isSubclassOfClass:[NSData class]]) {
-            value = [RDHUtils dataFromBase64String:value];
-        } else if ([self.typeClass isSubclassOfClass:[NSDate class]]) {
-            if ([value isKindOfClass:[NSString class]]) {
-                value = [[[self class] dateFormatter] dateFromString:value];
-            } else if ([value isKindOfClass:[NSNumber class]]) {
-                value = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]];
-            }
-        }
-    } else if ([[self class] canAssignNumber:self.type]) {
-        if ([value isKindOfClass:[NSString class]]) {
-            // Convert to decimal number to preserve accuracy
-            value = [RDHUtils decimalNumberForString:value];
+        if (class_isMetaClass(object_getClass(value))) {
+            // Value still a class
+            value = NSStringFromClass(value);
         }
     }
-    
     return value;
-}
-
--(NSString *)getterName
-{
-    return self.getter ? self.getter : self.name;
-}
-
--(BOOL)canSetValue
-{
-    return !self.readonly || self.iVar;
-}
-
--(BOOL)isAssign
-{
-    return self.kind == RDHPropertyAttributeAssign;
-}
-
--(BOOL)isWeak
-{
-    return self.kind == RDHPropertyAttributeWeak;
-}
-
--(BOOL)isStrong
-{
-    return self.kind == RDHPropertyAttributeStrong;
-}
-
--(BOOL)isCopying
-{
-    return self.kind == RDHPropertyAttributeCopy;
 }
 
 -(Class)classForObjectsIfArray
@@ -368,57 +437,56 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
     }
 }
 
--(NSString *)debugDescription
+@end
+
+@implementation RDHPropertyInfo (RDHDateFormatter)
+
+static NSDateFormatter *_static_dateFormatter;
+
++(void)setDateFormatter:(NSDateFormatter *)dateFormatter
 {
-    NSMutableString *s = [[super debugDescription] mutableCopy];
-    
-    [s appendString:@"[ \n\t"];
-    
-    [s appendFormat:@"name=%@, \n\t", self.name];
-    [s appendFormat:@"declaringClass=%@, \n\t", self.declaingClass];
-    [s appendFormat:@"derivedGetterName=%@, \n\t", self.getterName];
-    [s appendFormat:@"derivedSetterName=%@, \n\t", self.setter ? self.setter : self.name];
-    [s appendFormat:@"canSerialise=%d, \n\t", self.canSerialise];
-    [s appendFormat:@"canDeserialise=%d, \n\t", self.canDeserialise];
-    [s appendFormat:@"serialisationName=%@, \n\t", self.serialisationName];
-    
-    [s appendFormat:@"attributes=T%c", self.type];
-    if (self.type == RDHPropertyTypeObject && self.typeClass) {
-        [s appendFormat:@"\"%@\"", NSStringFromClass(self.typeClass)];
+    _static_dateFormatter = dateFormatter;
+}
+
++(NSDateFormatter *)dateFormatter
+{
+    if (_static_dateFormatter) {
+        return _static_dateFormatter;
+    } else {
+        return [RDHUtils ISO8601DateFormatter];
     }
-    [s appendString:@","];
-    
-    if (self.readonly) {
-        [s appendFormat:@"%c,", RDHPropertyAttributeReadonly];
+}
+
+@end
+
+@implementation RDHPropertyInfo (RDHInfoMethodsPrivate)
+
++(BOOL)canAssignNumber:(RDHPropertyType)type
+{
+    switch (type) {
+        case RDHPropertyTypeCBool:
+        case RDHPropertyTypeChar:
+        case RDHPropertyTypeShort:
+        case RDHPropertyTypeInt:
+        case RDHPropertyTypeLong:
+        case RDHPropertyTypeLongLong:
+        case RDHPropertyTypeUnsignedChar:
+        case RDHPropertyTypeUnsignedShort:
+        case RDHPropertyTypeUnsignedInt:
+        case RDHPropertyTypeUnsignedLong:
+        case RDHPropertyTypeUnsignedLongLong:
+        case RDHPropertyTypeFloat:
+        case RDHPropertyTypeDouble:
+            return YES;
+            
+        default:
+            return NO;
     }
-    if (!self.assign) {
-        [s appendFormat:@"%c,", self.kind];
-    }
-    if (self.nonatomic) {
-        [s appendFormat:@"%c,", RDHPropertyAttributeNonAtomic];
-    }
-    
-    if (self.getter) {
-        [s appendFormat:@"%c%@,", RDHPropertyAttributeGetter, self.getter];
-    }
-    if (self.setter) {
-        [s appendFormat:@"%c%@,", RDHPropertyAttributeSetter, self.setter];
-    }
-    
-    if (self.dynamic) {
-        [s appendFormat:@"%c,", RDHPropertyAttributeDynamic];
-    }
-    if (self.eligibleForGarbageCollection) {
-        [s appendFormat:@"%c,", RDHPropertyAttributeEligibleForGarbageCollection];
-    }
-    
-    if (self.iVar) {
-        [s appendFormat:@"%c%s", RDHPropertyAttributeIVar, ivar_getName(self.iVar)];
-    }
-    
-    [s appendString:@"\n]"];
-    
-    return s;
+}
+
++(BOOL)canAssignString:(RDHPropertyType)type
+{
+    return [self canAssignNumber:type] || type == RDHPropertyTypeClass;
 }
 
 +(RDHPropertyType)typeFromEncodedString:(NSString *)string
@@ -454,6 +522,10 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
         return NSClassFromString(className);
     }
 }
+
+@end
+
+@implementation RDHPropertyInfo (RDHInfoMethods)
 
 +(BOOL)typeImplmented:(RDHPropertyType)type
 {
@@ -570,50 +642,6 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
             
         case RDHPropertyTypeConst:
             return @"const";
-    }
-}
-
-+(BOOL)canAssignNumber:(RDHPropertyType)type
-{
-    switch (type) {
-        case RDHPropertyTypeCBool:
-        case RDHPropertyTypeChar:
-        case RDHPropertyTypeShort:
-        case RDHPropertyTypeInt:
-        case RDHPropertyTypeLong:
-        case RDHPropertyTypeLongLong:
-        case RDHPropertyTypeUnsignedChar:
-        case RDHPropertyTypeUnsignedShort:
-        case RDHPropertyTypeUnsignedInt:
-        case RDHPropertyTypeUnsignedLong:
-        case RDHPropertyTypeUnsignedLongLong:
-        case RDHPropertyTypeFloat:
-        case RDHPropertyTypeDouble:
-            return YES;
-            
-        default:
-            return NO;
-    }
-}
-
-+(BOOL)canAssignString:(RDHPropertyType)type
-{
-    return [self canAssignNumber:type] || type == RDHPropertyTypeClass;
-}
-
-static NSDateFormatter *_static_dateFormatter;
-
-+(void)setDateFormatter:(NSDateFormatter *)dateFormatter
-{
-    _static_dateFormatter = dateFormatter;
-}
-
-+(NSDateFormatter *)dateFormatter
-{
-    if (_static_dateFormatter) {
-        return _static_dateFormatter;
-    } else {
-        return [RDHUtils ISO8601DateFormatter];
     }
 }
 

@@ -8,7 +8,7 @@
 
 #import "RDHJSONObjectSerialisation+RDHSerialisation.h"
 
-#import "RDHJSONObjectSerialisation_RDHInternal.h"
+#import "RDHJSONObjectSerialisation+RDHInternal.h"
 
 @implementation RDHJSONObjectSerialisation (RDHSerialisation)
 
@@ -89,13 +89,17 @@
             
         } else if ([value isKindOfClass:[NSDictionary class]]) {
             return [self JSONForDictionary:value options:options];
+            
         } else if ([value isKindOfClass:[NSData class]]) {
             return [RDHUtils base64StringFromData:value];
+            
         } else if ([self conformsToSerialisationProtocol:value]) {
             return [self JSONObjectForObject:value options:options];
+            
         } else if ([value isKindOfClass:[NSDate class]]) {
+            
             if (options & RDHJSONWritingOptionsConvertDatesToUnixTimestamps) {
-                return @(round([value timeIntervalSince1970]));
+                return @((long) round([value timeIntervalSince1970]));
             } else {
                 return [[RDHPropertyInfo dateFormatter] stringFromDate:value];
             }

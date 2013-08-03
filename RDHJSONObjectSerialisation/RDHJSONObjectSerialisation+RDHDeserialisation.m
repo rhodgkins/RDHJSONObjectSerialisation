@@ -8,7 +8,7 @@
 
 #import "RDHJSONObjectSerialisation+RDHDeserialisation.h"
 
-#import "RDHJSONObjectSerialisation_RDHInternal.h"
+#import "RDHJSONObjectSerialisation+RDHInternal.h"
 
 @implementation RDHJSONObjectSerialisation (RDHDeserialisation)
 
