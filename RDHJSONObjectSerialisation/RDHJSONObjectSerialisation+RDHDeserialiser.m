@@ -1,5 +1,5 @@
 //
-//  RDHJSONObjectSerialisation+RDHDeserialisation.m
+//  RDHJSONObjectSerialisation+RDHDeserialiser.m
 //  RDHJSONObjectSerialisation
 //
 //  Created by Richard Hodgkins on 21/07/2013.
@@ -10,7 +10,7 @@
 
 #import "RDHJSONObjectSerialisation+RDHInternal.h"
 
-@implementation RDHJSONObjectSerialisation (RDHDeserialisation)
+@implementation RDHJSONObjectSerialisation (RDHDeserialiser)
 
 +(id)objectOfKind:(Class)cls forJSONObject:(id)JSONObject options:(RDHJSONReadingOptions)options
 {

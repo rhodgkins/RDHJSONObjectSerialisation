@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ * This protocol should be adopted by any object that wants to be used with RDHJSONObjectSerialisation.
+ *
+ * While none of the methods are required, the protocol itself should be adopted so the serialiser
+ * will know which classes to ignore.
+ */
 @protocol RDHJSONObjectSerialisationProtocol <NSObject>
 
 @optional

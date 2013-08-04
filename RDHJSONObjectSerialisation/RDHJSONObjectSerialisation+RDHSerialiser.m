@@ -1,5 +1,5 @@
 //
-//  RDHJSONObjectSerialisation+RDHSerialisation.m
+//  RDHJSONObjectSerialisation+RDHSerialiser.m
 //  RDHJSONObjectSerialisation
 //
 //  Created by Richard Hodgkins on 21/07/2013.
@@ -10,7 +10,7 @@
 
 #import "RDHJSONObjectSerialisation+RDHInternal.h"
 
-@implementation RDHJSONObjectSerialisation (RDHSerialisation)
+@implementation RDHJSONObjectSerialisation (RDHSerialiser)
 
 +(BOOL)isObjectValidForSerialisation:(id)object
 {
