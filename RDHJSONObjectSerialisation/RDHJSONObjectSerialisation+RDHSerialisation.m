@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Rich H. All rights reserved.
 //
 
-#import "RDHJSONObjectSerialisation+RDHSerialisation.h"
+#import "RDHJSONObjectSerialisation.h"
 
 #import "RDHJSONObjectSerialisation+RDHInternal.h"
 
