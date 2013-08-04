@@ -33,16 +33,16 @@
 		4454A80C179870E700D87297 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4454A8161798768C00D87297 /* RDHJSONObjectSerialisation */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RDHJSONObjectSerialisation; sourceTree = BUILT_PRODUCTS_DIR; };
 		4454A823179876D900D87297 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		44B078CF179C035F001A73DE /* RDHPropertyInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RDHPropertyInfo.h; path = ../../../RDHJSONObjectSerialisation/RDHPropertyInfo.h; sourceTree = "<group>"; };
-		44B078D0179C035F001A73DE /* RDHPropertyInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RDHPropertyInfo.m; path = ../../../RDHJSONObjectSerialisation/RDHPropertyInfo.m; sourceTree = "<group>"; };
+		44B078CF179C035F001A73DE /* RDHPropertyInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDHPropertyInfo.h; sourceTree = "<group>"; };
+		44B078D0179C035F001A73DE /* RDHPropertyInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDHPropertyInfo.m; sourceTree = "<group>"; };
 		44B078D3179C1104001A73DE /* RDHJSONObjectSerialisationProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RDHJSONObjectSerialisationProtocol.h; path = ../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisationProtocol.h; sourceTree = "<group>"; };
-		44B078D4179C3138001A73DE /* RDHJSONObjectSerialisation+RDHInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RDHJSONObjectSerialisation+RDHInternal.h"; path = "../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation+RDHInternal.h"; sourceTree = "<group>"; };
+		44B078D4179C3138001A73DE /* RDHJSONObjectSerialisation+RDHInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RDHJSONObjectSerialisation+RDHInternal.h"; sourceTree = "<group>"; };
 		44B078D5179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RDHJSONObjectSerialisation+RDHSerialisation.h"; path = "../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation+RDHSerialisation.h"; sourceTree = "<group>"; };
 		44B078D6179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RDHJSONObjectSerialisation+RDHSerialisation.m"; path = "../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation+RDHSerialisation.m"; sourceTree = "<group>"; };
 		44B078D9179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RDHJSONObjectSerialisation+RDHDeserialisation.h"; path = "../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation+RDHDeserialisation.h"; sourceTree = "<group>"; };
 		44B078DA179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RDHJSONObjectSerialisation+RDHDeserialisation.m"; path = "../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation+RDHDeserialisation.m"; sourceTree = "<group>"; };
-		44B078DD179C676A001A73DE /* RDHUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RDHUtils.h; path = ../../../RDHJSONObjectSerialisation/RDHUtils.h; sourceTree = "<group>"; };
-		44B078DE179C676A001A73DE /* RDHUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RDHUtils.m; path = ../../../RDHJSONObjectSerialisation/RDHUtils.m; sourceTree = "<group>"; };
+		44B078DD179C676A001A73DE /* RDHUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDHUtils.h; sourceTree = "<group>"; };
+		44B078DE179C676A001A73DE /* RDHUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDHUtils.m; sourceTree = "<group>"; };
 		44B078E1179C8C4F001A73DE /* SimpleObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleObject.h; sourceTree = "<group>"; };
 		44B078E2179C8C4F001A73DE /* SimpleObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleObject.m; sourceTree = "<group>"; };
 		44DCFAA617989C9000C2DDE0 /* RDHJSONObjectSerialisation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RDHJSONObjectSerialisation.h; path = ../../../RDHJSONObjectSerialisation/RDHJSONObjectSerialisation.h; sourceTree = "<group>"; };
@@ -70,6 +70,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		444C805017AE8B36005524BA /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				44B078D4179C3138001A73DE /* RDHJSONObjectSerialisation+RDHInternal.h */,
+				44B078CF179C035F001A73DE /* RDHPropertyInfo.h */,
+				44B078D0179C035F001A73DE /* RDHPropertyInfo.m */,
+				44B078DD179C676A001A73DE /* RDHUtils.h */,
+				44B078DE179C676A001A73DE /* RDHUtils.m */,
+			);
+			name = Private;
+			path = ../../../RDHJSONObjectSerialisation/Private;
+			sourceTree = "<group>";
+		};
 		4454A7D61798705B00D87297 = {
 			isa = PBXGroup;
 			children = (
@@ -128,18 +141,14 @@
 		44DCFAA517989C7B00C2DDE0 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				444C805017AE8B36005524BA /* Private */,
 				44B078D3179C1104001A73DE /* RDHJSONObjectSerialisationProtocol.h */,
 				44DCFAA617989C9000C2DDE0 /* RDHJSONObjectSerialisation.h */,
 				44DCFAA717989C9000C2DDE0 /* RDHJSONObjectSerialisation.m */,
-				44B078D4179C3138001A73DE /* RDHJSONObjectSerialisation+RDHInternal.h */,
 				44B078D5179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.h */,
 				44B078D6179C3193001A73DE /* RDHJSONObjectSerialisation+RDHSerialisation.m */,
 				44B078D9179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.h */,
 				44B078DA179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialisation.m */,
-				44B078CF179C035F001A73DE /* RDHPropertyInfo.h */,
-				44B078D0179C035F001A73DE /* RDHPropertyInfo.m */,
-				44B078DD179C676A001A73DE /* RDHUtils.h */,
-				44B078DE179C676A001A73DE /* RDHUtils.m */,
 			);
 			name = Classes;
 			path = "Dummy Objects";
