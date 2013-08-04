@@ -382,7 +382,7 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
 #pragma clang diagnostic pop
                     }
                 } else if (!self.readonly) {
-                    // Set value is standard so just
+                    // Set value is standard so just set using key path
                     [object setValue:value forKeyPath:self.name];
                 } else {
                     // Most likely readonly property so set the backing iVar
