@@ -37,13 +37,13 @@
  * Used for deserialisation. If the objects inside this array are simple types (NSString, NSNumber, NSDate, NSData, NSArray, NSDictionary) then they will be automatically deserialised.
  * @returns class of the items in the array property. Arrays containing different types are not supported. Return nil for attempted automatic deserialisation.
  */
-+(Class)classForObjectsInArrayProperty:(NSString *)property;
++(Class)classForObjectsInArrayProperty:(NSString *)propertyName;
 
 /**
  * Used for deserialisation. If the objects inside this dictionary are simple types (NSString, NSNumber, NSDate, NSData, NSArray, NSDictionary) then they will be automatically deserialised.
  * @returns class of the item in the dictionary property. Return nil for attempted automatic deserialisation.
  */
-+(Class)classForObjectWithKey:(NSString *)key forDictionaryProperty:(NSString *)property;
++(Class)classForObjectWithKey:(NSString *)key forDictionaryProperty:(NSString *)propertyName;
 
 /**
  * This method can be used for custom serialisation of property values. For example, say this property is declared as a NSDate, you might want to serialise it to a string of a certain format in the JSON.
