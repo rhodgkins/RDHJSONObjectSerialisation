@@ -93,7 +93,9 @@
             // Ignore nulls
         } else {
             
-            if ([[self class] isValidJSONPrimative:JSONObject]) {
+            if ([[self class] conformsToSerialisationProtocol:info.typeClass]) {
+                return [self objectOfKind:info.typeClass forJSONObject:JSONObject options:options];
+            } else if ([[self class] isValidJSONPrimative:JSONObject]) {
                 return JSONObject;
             } else if ([JSONObject isKindOfClass:[NSArray class]]) {
                 return [self objectOfKind:[info classForObjectsIfArray] forJSONObject:JSONObject options:options];
