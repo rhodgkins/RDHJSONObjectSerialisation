@@ -10,6 +10,12 @@
 
 #import "RDHJSONObjectSerialisation+RDHInternal.h"
 
+#ifdef DEBUG
+static NSJSONWritingOptions const DEBUG_WRITING_OPTIONS = NSJSONWritingPrettyPrinted;
+#else
+static NSJSONWritingOptions const DEBUG_WRITING_OPTIONS = 0;
+#endif
+
 @implementation RDHJSONObjectSerialisation (RDHSerialiser)
 
 +(BOOL)isObjectValidForSerialisation:(id)object
@@ -20,7 +26,7 @@
 +(NSData *)JSONForObject:(id)object options:(RDHJSONWritingOptions)options error:(NSError *__autoreleasing *)error
 {
     id jsonObject = [self JSONObjectForObject:object options:options];
-    return [NSJSONSerialization dataWithJSONObject:jsonObject options:NSJSONWritingPrettyPrinted error:error];
+    return [NSJSONSerialization dataWithJSONObject:jsonObject options:DEBUG_WRITING_OPTIONS error:error];
 }
 
 +(id)JSONObjectForObject:(id)object options:(RDHJSONWritingOptions)options
