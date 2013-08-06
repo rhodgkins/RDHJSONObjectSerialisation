@@ -134,9 +134,18 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
     } else if (self.type == RDHPropertyTypeObject) {
         
         if ([self.typeClass isSubclassOfClass:[NSDecimalNumber class]]) {
-            value = [RDHUtils decimalNumberForString:value];
+//            value = [RDHUtils decimalNumberForString:value];
+            if ([value isKindOfClass:[NSNumber class]]) {
+                value = [value descriptionWithLocale:[RDHUtils enUSPOSIXLocale]];
+            }
+            value = [NSDecimalNumber decimalNumberWithString:value locale:[RDHUtils enUSPOSIXLocale]];
         } else if ([self.typeClass isSubclassOfClass:[NSNumber class]]) {
-            value = [RDHUtils numberForString:value];
+//            value = [RDHUtils numberForString:value];
+            if ([value isKindOfClass:[NSNumber class]]) {
+                value = value;
+            } else {
+                value = [RDHUtils numberForString:value];
+            }
         } else if ([self.typeClass isSubclassOfClass:[NSData class]]) {
             value = [RDHUtils dataFromBase64String:value];
         } else if ([self.typeClass isSubclassOfClass:[NSDate class]]) {
@@ -406,7 +415,8 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
         
         if ([value isKindOfClass:[NSNumber class]]) {
             // Value is still NSNumber
-            value = [RDHUtils stringForDecimalNumber:value];
+//            value = [RDHUtils stringForDecimalNumber:value];
+            value = [value descriptionWithLocale:[RDHUtils enUSPOSIXLocale]];
         }
         
     } else if (self.type == RDHPropertyTypeClass) {

@@ -19,6 +19,8 @@
 
 @interface RDHUtils : NSObject
 
++(NSLocale *)enUSPOSIXLocale;
+
 +(NSDateFormatter *)ISO8601DateFormatter;
 
 +(NSString *)stringForDecimalNumber:(NSDecimalNumber *)number;

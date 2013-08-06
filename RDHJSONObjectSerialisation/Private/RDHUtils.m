@@ -49,20 +49,6 @@
     return decimalNumberFormatter;
 }
 
-+(NSDateFormatter *)ISO8601DateFormatter
-{
-    static NSDateFormatter *ISO8601DateFormatter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        ISO8601DateFormatter = [NSDateFormatter new];
-        [ISO8601DateFormatter setLocale:[self enUSPOSIXLocale]];
-        [ISO8601DateFormatter setLenient:YES];
-        [ISO8601DateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-        [ISO8601DateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ssZZZ"];
-    });
-    return ISO8601DateFormatter;
-}
-
 +(NSString *)stringForDecimalNumber:(NSNumber *)number
 {
     if (number) {
@@ -90,23 +76,37 @@
     }
 }
 
-+(NSString *)stringForISO8601Date:(NSDate *)date
++(NSDateFormatter *)ISO8601DateFormatter
 {
-    if (date) {
-        return [[self ISO8601DateFormatter] stringFromDate:date];
-    } else {
-        return nil;
-    }
+    static NSDateFormatter *ISO8601DateFormatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ISO8601DateFormatter = [NSDateFormatter new];
+        [ISO8601DateFormatter setLocale:[self enUSPOSIXLocale]];
+        [ISO8601DateFormatter setLenient:YES];
+        [ISO8601DateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+        [ISO8601DateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ssZZZ"];
+    });
+    return ISO8601DateFormatter;
 }
 
-+(NSDate *)ISO8601DateForString:(NSString *)string
-{
-    if (string) {
-        return [[self ISO8601DateFormatter] dateFromString:string];
-    } else {
-        return nil;
-    }
-}
+//+(NSString *)stringForISO8601Date:(NSDate *)date
+//{
+//    if (date) {
+//        return [[self ISO8601DateFormatter] stringFromDate:date];
+//    } else {
+//        return nil;
+//    }
+//}
+//
+//+(NSDate *)ISO8601DateForString:(NSString *)string
+//{
+//    if (string) {
+//        return [[self ISO8601DateFormatter] dateFromString:string];
+//    } else {
+//        return nil;
+//    }
+//}
 
 +(NSData *)dataFromBase64String:(NSString *)encoding
 {
