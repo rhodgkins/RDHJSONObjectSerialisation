@@ -50,16 +50,6 @@
     return value;
 }
 
-+(BOOL)shouldDeserialiseProperty:(NSString *)propertyName
-{
-    return ![@"tag" isEqualToString:propertyName];
-}
-
-+(BOOL)shouldSerialiseProperty:(NSString *)propertyName
-{
-    return ![@"tag" isEqualToString:propertyName];
-}
-
 -(instancetype)init
 {
     self = [super init];

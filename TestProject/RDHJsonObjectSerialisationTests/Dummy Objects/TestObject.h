@@ -13,8 +13,6 @@
 @class AnotherTestObject;
 @interface TestObject : NSObject<RDHJSONObjectSerialisationProtocol>
 
-@property (nonatomic, copy) NSString *tag;
-
 @property (nonatomic, strong) NSString *strProp;
 @property (nonatomic, strong) NSDecimalNumber *decNumProp;
 @property (nonatomic, strong) NSNumber *numProp;
