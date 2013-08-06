@@ -342,7 +342,7 @@ static NSString * RDHValueForAttributeStarting(const char **attr)
         }
         
         const BOOL checkForSerialisingProperty = [declaringClass respondsToSelector:@selector(shouldSerialiseProperty:)];
-        const BOOL checkForDeserialisingProperty = [declaringClass respondsToSelector:@selector(shouldDeserialiseProperty::)];
+        const BOOL checkForDeserialisingProperty = [declaringClass respondsToSelector:@selector(shouldDeserialiseProperty:)];
         const BOOL checkForSerialisationNameForProperty = [declaringClass respondsToSelector:@selector(serialisationNameForProperty:)];
         
         _hasCustomSerialisationMethod = [declaringClass respondsToSelector:@selector(serialisationValueForValue:forProperty:)];
