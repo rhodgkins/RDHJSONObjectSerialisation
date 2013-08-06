@@ -32,7 +32,7 @@ typedef NS_OPTIONS(NSUInteger, RDHJSONWritingOptions) {
     /// Value to use instead of passing in 0 as an option parameter.
     RDHJSONWritingOptionsNoOptions = 0,
     /// Any properties that are `nil` will be outputted as NSNull#null and eventually `null` in the JSON.
-    RDHJSONWritingOptionsConvertNilsToNSNulls = (1UL << 0),
+    RDHJSONWritingOptionsConvertNilsToNulls = (1UL << 0),
     /// Any date properties will be outputted as Unix timestamps in seconds.
     RDHJSONWritingOptionsConvertDatesToUnixTimestamps = (1UL << 1),
     /// Used for debugging any problems with serialisation.

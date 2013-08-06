@@ -112,7 +112,7 @@ static NSJSONWritingOptions const DEBUG_WRITING_OPTIONS = 0;
         }
     
     } else {
-        if (options & RDHJSONWritingOptionsConvertNilsToNSNulls) {
+        if (options & RDHJSONWritingOptionsConvertNilsToNulls) {
             return [NSNull null];
         }
     }
