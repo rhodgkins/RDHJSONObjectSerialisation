@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.author = 'Rich Hodgkins'
   s.source = { :git => 'https://github.com/rhodgkins/RDHJSONObjectSerialisation.git', :tag => s.version.to_s }
   
-  s.source_files = 'RDHJSONObjectSerialisation/'
+  s.source_files = 'RDHJSONObjectSerialisation/**/*.{h,m}'
   s.private_header_files = 'RDHJSONObjectSerialisation/Private/*.h'
   s.ios.deployment_target = '5.0'
   s.osx.deployment_target = '10.7'
