@@ -33,6 +33,12 @@ int main(int argc, const char * argv[])
 
 static void run()
 {
+//    NSDictionary *d = @{@"K" : [NSDecimalNumber decimalNumberWithString:@"234324.2E41"]};
+//    NSData *data = [NSJSONSerialization dataWithJSONObject:d options:NSJSONWritingPrettyPrinted error:nil];
+//    NSLog(@"%@ --> %@", d, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+//    NSDictionary *dd = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+//    NSLog(@"%@, %@", dd, [dd[@"K"] class]);
+//    return;
     SimpleObject *o = [SimpleObject new];
 //    o.objectProp = [SubSimpleObject new];
     o.objectProp.objectProp = [SimpleObject new];

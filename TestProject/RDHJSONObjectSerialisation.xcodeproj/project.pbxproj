@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		444C805317AEC2BA005524BA /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 444C805217AEC2BA005524BA /* TestObject.m */; };
+		444C805417AEC2BA005524BA /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 444C805217AEC2BA005524BA /* TestObject.m */; };
 		4454A806179870C600D87297 /* RDHJsonObjectSerialisationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4454A805179870C600D87297 /* RDHJsonObjectSerialisationTests.m */; };
 		4454A80B179870E100D87297 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4454A7E21798705B00D87297 /* Foundation.framework */; };
 		4454A80D179870E700D87297 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4454A80C179870E700D87297 /* SenTestingKit.framework */; };
@@ -27,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		444C805117AEC2BA005524BA /* TestObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestObject.h; sourceTree = "<group>"; };
+		444C805217AEC2BA005524BA /* TestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestObject.m; sourceTree = "<group>"; };
 		4454A7E21798705B00D87297 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4454A7F5179870C600D87297 /* RDHJsonObjectSerialisationTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RDHJsonObjectSerialisationTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4454A805179870C600D87297 /* RDHJsonObjectSerialisationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RDHJsonObjectSerialisationTests.m; sourceTree = "<group>"; };
@@ -132,6 +136,8 @@
 			children = (
 				44B078E1179C8C4F001A73DE /* SimpleObject.h */,
 				44B078E2179C8C4F001A73DE /* SimpleObject.m */,
+				444C805117AEC2BA005524BA /* TestObject.h */,
+				444C805217AEC2BA005524BA /* TestObject.m */,
 			);
 			path = "Dummy Objects";
 			sourceTree = "<group>";
@@ -252,6 +258,7 @@
 				44B078DC179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialiser.m in Sources */,
 				44B078E0179C676A001A73DE /* RDHUtils.m in Sources */,
 				44B078E4179C8C4F001A73DE /* SimpleObject.m in Sources */,
+				444C805417AEC2BA005524BA /* TestObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +273,7 @@
 				44B078DB179C31D2001A73DE /* RDHJSONObjectSerialisation+RDHDeserialiser.m in Sources */,
 				44B078DF179C676A001A73DE /* RDHUtils.m in Sources */,
 				44B078E3179C8C4F001A73DE /* SimpleObject.m in Sources */,
+				444C805317AEC2BA005524BA /* TestObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
