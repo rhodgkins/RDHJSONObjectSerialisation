@@ -8,8 +8,6 @@
 
 #import "TestObject.h"
 
-#import <objc/runtime.h>
-
 @implementation TestObject
 
 +(NSDateFormatter *)dateFormatter
@@ -79,43 +77,14 @@
     return self;
 }
 
--(NSString *)description
-{
-    unsigned int count;
-    objc_property_t *list = class_copyPropertyList([self class], &count);
-    
-    NSMutableDictionary *props = [NSMutableDictionary dictionaryWithCapacity:count];
-    
-    for (NSUInteger i=0; i<count; i++) {
-        NSString *name = [NSString stringWithUTF8String:property_getName(list[i])];
-        if ([@"tag" isEqualToString:name]) {
-            continue;
-        }
-        
-        id v = [self valueForKey:name];
-        if (!v) {
-            v = @"nil";
-        } else if ([v isKindOfClass:[NSDate class]]) {
-            static NSDateFormatter *df;
-            static dispatch_once_t onceToken;
-            dispatch_once(&onceToken, ^{
-                df = [NSDateFormatter new];
-                [df setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSSZZZ"];
-            });
-            v = [df stringFromDate:v];
-        }
-        [props setValue:v forKey:name];
-    }
-    
-    NSString *s = [props description];
-    s = [s stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\""];
-    
-    return [NSString stringWithFormat:@"%@->%@", NSStringFromClass([self class]), s];
-}
-
 -(NSUInteger)hash
 {
-    return [[self description] hash];
+    return [self autoHash];
+}
+
+-(NSString *)description
+{
+    return [self autoDescription];
 }
 
 -(BOOL)isEqual:(id)object
@@ -192,31 +161,14 @@
     return self;
 }
 
--(NSString *)description
-{
-    unsigned int count;
-    objc_property_t *list = class_copyPropertyList([self class], &count);
-    
-    NSMutableDictionary *props = [NSMutableDictionary dictionaryWithCapacity:count];
-    
-    for (NSUInteger i=0; i<count; i++) {
-        NSString *name = [NSString stringWithUTF8String:property_getName(list[i])];
-        
-        id v = [self valueForKey:name];
-        if (!v) {
-            v = @"nil";
-        }
-        [props setValue:v forKey:name];
-    }
-    NSString *s = [props description];
-    s = [s stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\""];
-    
-    return [NSString stringWithFormat:@"%@->%@", NSStringFromClass([self class]), s];
-}
-
 -(NSUInteger)hash
 {
-    return [[self description] hash];
+    return [self autoHash];
+}
+
+-(NSString *)description
+{
+    return [self autoDescription];
 }
 
 -(BOOL)isEqual:(id)object

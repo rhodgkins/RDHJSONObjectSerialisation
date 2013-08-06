@@ -5,7 +5,12 @@
 //  Created by Richard Hodgkins on 18/07/2013.
 //  Copyright (c) 2013 Rich H. All rights reserved.
 //
+
 #import "SenTestCase+RDHJSON.h"
+
+@interface RDHTestObjectTests : SenTestCase
+
+@end
 
 #import "TestObject.h"
 
@@ -16,10 +21,6 @@ static NSString *const JSON_OUTPUT_NIL_OPTIONS = @"{\n  \"longProp\" : -23432432
 static NSString *const JSON_OUTPUT_UNIX_OPTIONS = @"{\n  \"longProp\" : -234324324234324,\n  \"intProp\" : -2343,\n  \"objectProp\" : {\n    \"anotherDecNumProp\" : \"486768768.876488867867\",\n    \"anotherStrProp\" : \"INNER_PROP\",\n    \"anotherNumProp\" : \"3547\"\n  },\n  \"strProp\" : \"STR_PROP\",\n  \"customDateProp\" : \"2006-03-28\",\n  \"dateProp\" : 2342342342,\n  \"boolPropNO\" : 0,\n  \"arrayStringProp\" : [\n    \"A1\",\n    \"A2\",\n    \"A3\"\n  ],\n  \"shortProp\" : -133,\n  \"boolPropYES\" : 1,\n  \"numProp\" : \"2324.003\",\n  \"dataProp\" : \"QkFTRSA2NCBFTkNPREVEIFNUUklORw==\",\n  \"decNumProp\" : \"23434234.2342342343232432\",\n  \"arrayNumberProp\" : [\n    1,\n    2,\n    3,\n    4\n  ]\n}";
 
 static NSString *const JSON_OUTPUT_NIL_UNIX_OPTIONS = @"{\n  \"longProp\" : -234324324234324,\n  \"intProp\" : -2343,\n  \"objectProp\" : {\n    \"anotherDecNumProp\" : \"486768768.876488867867\",\n    \"anotherStrProp\" : \"INNER_PROP\",\n    \"anotherNumProp\" : \"3547\"\n  },\n  \"strProp\" : \"STR_PROP\",\n  \"customDateProp\" : \"2006-03-28\",\n  \"dateProp\" : 2342342342,\n  \"arrayStringProp\" : [\n    \"A1\",\n    \"A2\",\n    \"A3\"\n  ],\n  \"nilStringProp\" : null,\n  \"boolPropNO\" : 0,\n  \"boolPropYES\" : 1,\n  \"shortProp\" : -133,\n  \"dataProp\" : \"QkFTRSA2NCBFTkNPREVEIFNUUklORw==\",\n  \"numProp\" : \"2324.003\",\n  \"arrayNumberProp\" : [\n    1,\n    2,\n    3,\n    4\n  ],\n  \"decNumProp\" : \"23434234.2342342343232432\"\n}";
-
-@interface RDHTestObjectTests : SenTestCase
-
-@end
 
 @implementation RDHTestObjectTests
 

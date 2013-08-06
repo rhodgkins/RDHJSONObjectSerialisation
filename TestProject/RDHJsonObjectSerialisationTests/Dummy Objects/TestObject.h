@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "NSObject+RDHAutoDescription.h"
+
 #import "RDHJSONObjectSerialisationProtocol.h"
 
 @class AnotherTestObject;
