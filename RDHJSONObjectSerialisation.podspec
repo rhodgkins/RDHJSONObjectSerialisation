@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'RDHJSONObjectSerialisation'
-  s.version = '0.0.1'
+  s.version = '0.5.0'
   s.license = 'MIT'
  
   s.summary = 'Simple JSON serialisation for any custom NSObject based on its declared properties.'
