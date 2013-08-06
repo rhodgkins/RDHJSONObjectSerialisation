@@ -162,9 +162,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4454A7F4179870C600D87297 /* RDHJsonObjectSerialisationTests */ = {
+		4454A7F4179870C600D87297 /* RDHJSONObjectSerialisationTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4454A808179870C600D87297 /* Build configuration list for PBXNativeTarget "RDHJsonObjectSerialisationTests" */;
+			buildConfigurationList = 4454A808179870C600D87297 /* Build configuration list for PBXNativeTarget "RDHJSONObjectSerialisationTests" */;
 			buildPhases = (
 				4454A7F0179870C600D87297 /* Sources */,
 				4454A7F1179870C600D87297 /* Frameworks */,
@@ -175,7 +175,7 @@
 			);
 			dependencies = (
 			);
-			name = RDHJsonObjectSerialisationTests;
+			name = RDHJSONObjectSerialisationTests;
 			productName = RDHJsonObjectSerialisationTests;
 			productReference = 4454A7F5179870C600D87297 /* RDHJsonObjectSerialisationTests.octest */;
 			productType = "com.apple.product-type.bundle";
@@ -218,7 +218,7 @@
 			projectRoot = "";
 			targets = (
 				4454A8151798768C00D87297 /* RDHJSONObjectSerialisation */,
-				4454A7F4179870C600D87297 /* RDHJsonObjectSerialisationTests */,
+				4454A7F4179870C600D87297 /* RDHJSONObjectSerialisationTests */,
 			);
 		};
 /* End PBXProject section */
@@ -387,7 +387,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4454A808179870C600D87297 /* Build configuration list for PBXNativeTarget "RDHJsonObjectSerialisationTests" */ = {
+		4454A808179870C600D87297 /* Build configuration list for PBXNativeTarget "RDHJSONObjectSerialisationTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4454A809179870C600D87297 /* Debug */,
