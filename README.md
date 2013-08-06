@@ -3,7 +3,7 @@ RDHJSONObjectSerialisation
 
 Simple JSON serialisation for any custom NSObject based on its declared properties.
 
-In depth readme to follow next week (wc 22-07-2013)...!
+This readme is a current work in progress and is being updated this week (05-08-2013).
 
 Example
 -------
