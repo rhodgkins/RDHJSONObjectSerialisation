@@ -54,9 +54,15 @@
         
         NSAssert([[self class] conformsToSerialisationProtocol:cls], @"Object does not conform to %@", NSStringFromProtocol(@protocol(RDHJSONObjectSerialisationProtocol)));
         
-        id object = [cls new];
+        id object;
         
-        NSOrderedSet *properties = [self propertiesForClass:[object class]];
+        if ([cls respondsToSelector:@selector(newObjectForDeserialisation)]) {
+            object = [cls newObjectForDeserialisation];
+        } else {
+            object = [cls new];
+        }
+        
+        NSOrderedSet *properties = [self propertiesForClass:cls];
         
         for (RDHPropertyInfo *info in properties) {
             

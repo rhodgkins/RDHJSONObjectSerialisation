@@ -29,7 +29,7 @@
 +(BOOL)shouldDeserialiseProperty:(NSString *)propertyName;
 
 /**
- * @returns the serialisation field name for this property, returning nil here is the same as returning the paramter.
+ * @returns the serialisation field name for this property, returning nil here is the same as returning the parameter.
  */
 +(NSString *)serialisationNameForProperty:(NSString *)propertyName;
 
@@ -56,5 +56,11 @@
  * @returns the custom deserialisation value, or the value itself if no deserialisation is desired.
  */
 +(id)deserialisationValueForValue:(id)value forProperty:(NSString *)propertyName;
+
+/**
+ * This method can be used for creating an object with default values before deserialisation. During deserialisation these values might be overwritten.
+ * @returns a new setup instance ready for deserialisation.
+ */
++(instancetype)newObjectForDeserialisation;
 
 @end
