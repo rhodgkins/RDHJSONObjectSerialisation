@@ -7,8 +7,7 @@ This readme is a current work in progress and is being updated this week (05-08-
 
 Protocol
 --------
-The protocol must be adopted by custom objects, and gives you the options for custom serialisation and deserialisation.
-[RDHJSONObjectSerialisationProtocol](RDHJSONObjectSerialisation/RDHJSONObjectSerialisationProtocol.h)
+The [protocol](RDHJSONObjectSerialisation/RDHJSONObjectSerialisationProtocol.h) must be adopted by custom objects, and gives you the options for custom serialisation and deserialisation.
 
 Example
 -------
