@@ -5,6 +5,11 @@ Simple JSON serialisation for any custom NSObject based on its declared properti
 
 This readme is a current work in progress and is being updated this week (05-08-2013).
 
+Protocol
+--------
+The protocol must be adopted by custom objects, and gives you the options for custom serialisation and deserialisation.
+[RDHJSONObjectSerialisationProtocol](RDHJSONObjectSerialisation/RDHJSONObjectSerialisationProtocol.h)
+
 Example
 -------
 Custom objects defined as follows:
